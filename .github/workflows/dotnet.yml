@@ -28,4 +28,5 @@ jobs:
     - name: Setup GitHub Nuget
       run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/hounddog22030/index.json"
     - name: Publish Package To GitHub
-      run: dotnet nuget push **/*.nupkg --source github --api-key ${{ secrets.PAT }}
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+
