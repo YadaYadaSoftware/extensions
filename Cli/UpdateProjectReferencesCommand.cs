@@ -10,13 +10,32 @@ namespace YadaYada.BuildTools.Cli
 {
     public class UpdateProjectReferencesCommand
     {
-        [Option('p', "project", Required = true, HelpText = "Project Path")]
+        [Option('p', "project-path", Required = true, HelpText = "Project Path")]
         public string ProjectPath { get; set; }
+        [Option('o', "output", Required = false, HelpText = "Output")]
+        public string Output { get; set; }
 
-        public static void Process(string projectPath)
+
+
+        public static void Process(string projectPath, string output)
         {
             var p = Project.From(new FileInfo(projectPath));
             p.ItemGroup.ForEach(_=>Console.WriteLine(_.ToString()));
+            var references = p.GetProjectReferences(string.Empty);
+            Console.WriteLine(references.Count);
+            references.ForEach(_=>Console.WriteLine($"ProjectReference:{_.Include}"));
+            foreach (var projectReference in references)
+            {
+                var fileInfo = new FileInfo(Path.Combine(projectPath, projectReference.Include));
+                Console.WriteLine($"{nameof(fileInfo)}:{nameof(fileInfo.Exists)}={fileInfo.Exists}:{fileInfo.FullName}");
+            }
+            var itemGroup = new ItemGroup();
+            itemGroup.PackageReferences.Add(new PackageReference(){Include = "NewtonSoft.Json.Net"});
+            p.ItemGroup.Add(itemGroup);
+            var outputFileInfo = new FileInfo(output);
+            Project.Save(p,outputFileInfo);
+            Console.WriteLine(File.ReadAllText(outputFileInfo.FullName));
+            
         }
     }
 }

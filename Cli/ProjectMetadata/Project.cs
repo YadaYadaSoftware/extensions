@@ -48,7 +48,7 @@ public class Project
             .SelectMany(_ => _.PackageReferences).Select(_ => _).ToList();
 
     public List<ProjectReference> GetProjectReferences(string condition) => 
-        this.ItemGroup.Where(_ => condition.Equals(_.Condition, StringComparison.InvariantCultureIgnoreCase))
+        this.ItemGroup.Where(_ => string.IsNullOrEmpty(condition) || condition.Equals(_.Condition, StringComparison.InvariantCultureIgnoreCase))
             .SelectMany(_ => _.ProjectReferences).Select(_ => _).ToList();
 
     public List<ItemGroup> GetItemGroups(string configurationMaster)
@@ -72,6 +72,18 @@ public class Project
         }
 
         return returnValue;
+    }
+
+    public static void Save(Project project, FileInfo saveTo)
+    {
+        List<XmlSerializer> deSerializers = new List<XmlSerializer>();
+        deSerializers.Add(new XmlSerializer(typeof(Project)));
+        deSerializers.Add(new XmlSerializer(typeof(Project), defaultNamespace: "http://schemas.microsoft.com/developer/msbuild/2003"));
+        using (FileStream s = saveTo.OpenWrite())
+        {
+            deSerializers.First().Serialize(s, project);
+        }
+
     }
 
 
