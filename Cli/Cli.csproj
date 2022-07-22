@@ -8,7 +8,7 @@
     <RootNamespace>YadaYada.BuildTools.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>YadaYadaSoftware.BuildTools.$(AssemblyName)</PackageId>
 	  <PackAsTool>true</PackAsTool>
-	  <ToolCommandName>project</ToolCommandName>  </PropertyGroup>
+	  <ToolCommandName>updateproject</ToolCommandName>  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
