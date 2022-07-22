@@ -9,4 +9,5 @@ Parser.Default.ParseArguments<UpdateProjectReferencesCommand>(args)
     .WithParsed<UpdateProjectReferencesCommand>(o =>
     {
         Console.WriteLine($"Update {o.ProjectPath}");
+        UpdateProjectReferencesCommand.Process(o.ProjectPath);
     });
