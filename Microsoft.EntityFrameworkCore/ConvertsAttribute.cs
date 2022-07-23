@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YadaYada.Data.Library;
+﻿namespace Microsoft.EntityFrameworkCore;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
 public sealed class ConvertsAttribute : Attribute

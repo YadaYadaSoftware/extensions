@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace YadaYada.Data.Library;
+﻿namespace Microsoft.EntityFrameworkCore;
 
 public class ContextBaseOptions<T> : DbContextOptions<T> where T : DbContext
 {

@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Security.Claims;
 
-namespace YadaYada.Data.Library;
+namespace Microsoft.EntityFrameworkCore;
 
 
 public class ClaimsPrincipalModelKeyFactory : IModelCacheKeyFactory

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YadaYada.Security.Entity;
+﻿namespace Microsoft.EntityFrameworkCore;
 
 public interface ITenantScoped
 {

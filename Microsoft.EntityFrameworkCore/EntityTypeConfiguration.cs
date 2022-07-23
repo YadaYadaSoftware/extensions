@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace YadaYada.Data.Library;
+namespace Microsoft.EntityFrameworkCore;
 
 public abstract class EntityTypeConfiguration
 {

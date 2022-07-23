@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace YadaYada.Data.Library;
+namespace Microsoft.EntityFrameworkCore;
 
 public static class EntityBuilderExtensions
 {

@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace YadaYada.Data.Library;
+namespace Microsoft.EntityFrameworkCore;
 
 public class StringToBoolConverter : TypeConverter
 {

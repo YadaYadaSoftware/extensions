@@ -1,9 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel;
 
-namespace YadaYada.Data.Library;
+namespace Microsoft.EntityFrameworkCore;
 
 public abstract class TypeConverterBase : TypeConverter
 {
