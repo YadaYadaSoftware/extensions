@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Microsoft\Extens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQSEvents", "Amazon\Lambda\SQSEvents\SQSEvents.csproj", "{E0A14A00-F534-4665-835D-46858574A11B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S3Events", "Amazon\Lambda\S3Events\S3Events.csproj", "{FD9B488B-46FE-4EC8-BD66-C5B07009D366}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E0A14A00-F534-4665-835D-46858574A11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0A14A00-F534-4665-835D-46858574A11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0A14A00-F534-4665-835D-46858574A11B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9B488B-46FE-4EC8-BD66-C5B07009D366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9B488B-46FE-4EC8-BD66-C5B07009D366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9B488B-46FE-4EC8-BD66-C5B07009D366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9B488B-46FE-4EC8-BD66-C5B07009D366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
