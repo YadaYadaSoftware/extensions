@@ -1,9 +1,7 @@
 ﻿using Amazon.Lambda.Core;
-using Microsoft.Extensions.Logging;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 
-namespace YadaYada.BubbleBoy.WebApi.Services
+namespace Microsoft.Extensions.Logging
 {
     public class LoggerYadaYada : ILogger
     {

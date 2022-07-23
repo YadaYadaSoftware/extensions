@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using YadaYada.BubbleBoy.WebApi.Services;
 using YadaYada.Lambda.Services;
 
 // Same namespace as ILoggerFactory, to make these extensions appear

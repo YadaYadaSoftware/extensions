@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging;
 
 /// <summary>Options that can be used to configure Lambda logging.</summary>
 public class LambdaLoggerOptions

@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
-using YadaYada.BubbleBoy.WebApi.Services;
 using YadaYada.Lambda.Services;
 
 namespace Microsoft.Extensions.Logging
