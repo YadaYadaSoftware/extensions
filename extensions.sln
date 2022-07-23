@@ -5,11 +5,11 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Microsoft\Extensions\Logging\Logging.csproj", "{70E19CB5-DF89-477E-93D0-6942AB33CFBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQSEvents", "Amazon\Lambda\SQSEvents\SQSEvents.csproj", "{E0A14A00-F534-4665-835D-46858574A11B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims", "System\Security\Claims\Claims.csproj", "{611B18AC-F7EE-4BB1-9B90-82DBEBFAC7E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims", "System\Security\Claims\Claims.csproj", "{611B18AC-F7EE-4BB1-9B90-82DBEBFAC7E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3Events", "Amazon.Lambda.S3Events\S3Events.csproj", "{F9038D10-01FB-42D5-A525-2EABF6F5C2C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQSEvents", "Amazon.Lambda.SQSEvents\SQSEvents.csproj", "{13073866-A38B-482A-B22B-F3011BBF525B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{70E19CB5-DF89-477E-93D0-6942AB33CFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70E19CB5-DF89-477E-93D0-6942AB33CFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70E19CB5-DF89-477E-93D0-6942AB33CFBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0A14A00-F534-4665-835D-46858574A11B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0A14A00-F534-4665-835D-46858574A11B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0A14A00-F534-4665-835D-46858574A11B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0A14A00-F534-4665-835D-46858574A11B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{611B18AC-F7EE-4BB1-9B90-82DBEBFAC7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{611B18AC-F7EE-4BB1-9B90-82DBEBFAC7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{611B18AC-F7EE-4BB1-9B90-82DBEBFAC7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{F9038D10-01FB-42D5-A525-2EABF6F5C2C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9038D10-01FB-42D5-A525-2EABF6F5C2C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9038D10-01FB-42D5-A525-2EABF6F5C2C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13073866-A38B-482A-B22B-F3011BBF525B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13073866-A38B-482A-B22B-F3011BBF525B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13073866-A38B-482A-B22B-F3011BBF525B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13073866-A38B-482A-B22B-F3011BBF525B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
