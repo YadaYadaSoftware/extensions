@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// this is a comment
 
 namespace Microsoft.Extensions.Logging;
 
