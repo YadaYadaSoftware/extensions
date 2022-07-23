@@ -1,4 +1,5 @@
-﻿using Amazon.S3.Model;
+﻿using Amazon.Runtime.Internal.Util;
+using Amazon.S3.Model;
 
 namespace Microsoft.Extensions.Logging;
 
