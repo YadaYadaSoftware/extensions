@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Checksum
+      run: find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum
     - name: Set Version
       run: echo "VERSION=1.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
@@ -18,8 +20,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Checksum
-      run: $ find -s Microsoft -type f -exec md5sum {} \; | md5sum
     - name: Output Run ID
       run: echo ${{ github.run_id }}
     - name: Output Run Number
