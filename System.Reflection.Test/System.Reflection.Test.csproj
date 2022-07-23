@@ -27,4 +27,19 @@
     <ProjectReference Include="..\System.Reflection\System.Reflection.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\SampleEntity\Class.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Class.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\SampleEntity\Class.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Class.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
