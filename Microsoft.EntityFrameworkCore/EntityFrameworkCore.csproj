@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,9 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.Extensions.Logging\Logging.csproj" />
-    <ProjectReference Include="..\..\System.ComponentModel.DataAnnotations\DataAnnotations\DataAnnotations.csproj" />
-    <ProjectReference Include="..\..\System.Security.Claims\Claims.csproj" />
+    <ProjectReference Include="..\Microsoft.Extensions.Logging\Logging.csproj" />
+    <ProjectReference Include="..\System.ComponentModel.DataAnnotations\DataAnnotations.csproj" />
+    <ProjectReference Include="..\System.Security.Claims\Claims.csproj" />
   </ItemGroup>
 
 </Project>
