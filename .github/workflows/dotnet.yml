@@ -38,6 +38,7 @@ jobs:
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
   not_build:
     runs-on: ubuntu-latest
+    needs: [build]
     steps:
       - name: Another Step
         run: echo "Hello"
