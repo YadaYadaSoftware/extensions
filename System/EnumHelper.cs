@@ -1,14 +1,12 @@
 ﻿#region usings
 
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
 #endregion
 
-namespace YadaYada.Library.Extensions;
+namespace System;
 
 public static class EnumHelper
 {

@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using YadaYada.Library.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
