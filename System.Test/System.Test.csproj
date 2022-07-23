@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <RootNamespace>System</RootNamespace>
-	  <AssemblyName>YadaYadaSoftware.$(RootNamespace)</AssemblyName>
+	  <AssemblyName>YadaYadaSoftware.$(RootNamespace).Test</AssemblyName>
 	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
