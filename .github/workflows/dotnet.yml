@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Checksum
-      run: MICROSOFT_CHECKSUM=$(find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum) >> $GITHUB_ENV
+      run: find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum > math-homework.txt
     - name: Upload math result for job 1
       uses: actions/upload-artifact@v3
       with:
