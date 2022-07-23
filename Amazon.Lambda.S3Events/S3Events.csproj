@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft\Extensions\Logging\Logging.csproj" />
+    <ProjectReference Include="..\Microsoft.Extensions.Logging\Logging.csproj" />
   </ItemGroup>
 
 </Project>
