@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims", "System.Security.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Microsoft.Extensions.Logging\Logging.csproj", "{17E47828-42A0-45DD-AA5F-2B0A28F30A71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore", "Microsoft.EntityFrameworkCore\EntityFrameworkCore\EntityFrameworkCore.csproj", "{7147331B-4204-4863-BC26-ADED4BF60543}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnnotations", "System.ComponentModel.DataAnnotations\DataAnnotations\DataAnnotations.csproj", "{5FA827D9-BB2A-4961-B6FF-FCBABA2027E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{17E47828-42A0-45DD-AA5F-2B0A28F30A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17E47828-42A0-45DD-AA5F-2B0A28F30A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17E47828-42A0-45DD-AA5F-2B0A28F30A71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7147331B-4204-4863-BC26-ADED4BF60543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7147331B-4204-4863-BC26-ADED4BF60543}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7147331B-4204-4863-BC26-ADED4BF60543}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7147331B-4204-4863-BC26-ADED4BF60543}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FA827D9-BB2A-4961-B6FF-FCBABA2027E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FA827D9-BB2A-4961-B6FF-FCBABA2027E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FA827D9-BB2A-4961-B6FF-FCBABA2027E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FA827D9-BB2A-4961-B6FF-FCBABA2027E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
