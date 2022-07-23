@@ -11,7 +11,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Checksum
-      run: find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum
+      run: echo "find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum" > $MICROSOFT_CHECKSUM >> $GITHUB_ENV
+    - name: Upload math result for job 1
+      uses: actions/upload-artifact@v3
+      with:
+        name: homework
+        path: math-homework.txt    
+    - name: Download math result for job 1
+      uses: actions/download-artifact@v3
+      with:
+        name: homework
     - name: Set Version
       run: echo "VERSION=1.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
