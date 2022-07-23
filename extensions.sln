@@ -15,17 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore", "Micr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAnnotations", "System.ComponentModel.DataAnnotations\DataAnnotations.csproj", "{0893C9ED-5BE4-4FAB-A3B8-C0F75E307EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System", "System\System.csproj", "{AC1D4D22-561B-4DDF-9669-73D376EA9C61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System", "System\System.csproj", "{AC1D4D22-561B-4DDF-9669-73D376EA9C61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Test", "System.Test\System.Test.csproj", "{8B06E24D-3EF2-4886-8EE2-054C7D5E0F9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Test", "System.Test\System.Test.csproj", "{8B06E24D-3EF2-4886-8EE2-054C7D5E0F9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Test", "System.Security.Claims.Test\Claims.Test.csproj", "{2EFECC96-D7AA-4481-BA34-29699B942D30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Test", "System.Security.Claims.Test\Claims.Test.csproj", "{2EFECC96-D7AA-4481-BA34-29699B942D30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reflection", "System.Reflection\Reflection.csproj", "{96212322-15BE-4756-872C-3805EF125013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reflection", "System.Reflection\Reflection.csproj", "{96212322-15BE-4756-872C-3805EF125013}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reflection.Test", "System.Reflection.Test\Reflection.Test.csproj", "{49F609C3-D8FD-4894-A13B-6D877A1495FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reflection.Test", "System.Reflection.Test\Reflection.Test.csproj", "{49F609C3-D8FD-4894-A13B-6D877A1495FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collections.Generic", "System.Collections.Generic\Collections.Generic.csproj", "{DC56E4E8-9B22-4A8D-BBD8-7F24AA9BE5C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collections.Generic", "System.Collections.Generic\Collections.Generic.csproj", "{DC56E4E8-9B22-4A8D-BBD8-7F24AA9BE5C3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}"
 EndProject
@@ -37,7 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microsoft", "Microsoft", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{9787DD29-E282-4F30-B8C1-6A5EB8FE7B54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "Microsoft.Extensions.DependencyInjection\DependencyInjection.csproj", "{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection", "Microsoft.Extensions.DependencyInjection\DependencyInjection.csproj", "{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Amazon", "Amazon", "{1B54A874-82CD-4145-BC73-38CB9A2B16ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudFormation", "Amazon.CloudFormation\CloudFormation\CloudFormation.csproj", "{D34CD28F-45C6-4253-8AD4-70DC7A61A15D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +101,10 @@ Global
 		{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +122,7 @@ Global
 		{4748A134-53F0-441A-8D68-8D3C4311E602} = {D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}
 		{9787DD29-E282-4F30-B8C1-6A5EB8FE7B54} = {7799D844-78DA-4553-B758-171CD44E589C}
 		{31CDF3BA-CB98-4B1C-9B06-AE3F644CE9C0} = {9787DD29-E282-4F30-B8C1-6A5EB8FE7B54}
+		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D} = {1B54A874-82CD-4145-BC73-38CB9A2B16ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C9B63DA-A059-4EB7-A57C-8964D8A1011A}
