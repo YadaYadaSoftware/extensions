@@ -18,6 +18,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    - name: Checksum
+      run: $ find -s Microsoft -type f -exec md5sum {} \; | md5sum
     - name: Output Run ID
       run: echo ${{ github.run_id }}
     - name: Output Run Number
