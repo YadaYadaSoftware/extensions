@@ -10,22 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Download math result for job 1
-      uses: actions/download-artifact@v3
-      with:
-        name: homework
-    - name: Display Previous Checksum
-      run: cat math-homework.txt
-
-    - name: Checksum
-      run: find Microsoft -type f -exec md5sum {} \; | sort -k 2 | md5sum > math-homework.txt
-    - name: Upload math result for job 1
-      uses: actions/upload-artifact@v3
-      with:
-        name: homework
-        path: math-homework.txt
-        retention-days: 5        
     - name: Set Version
       run: echo "VERSION=1.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
@@ -34,12 +18,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Output Run ID
-      run: echo ${{ github.run_id }}
-    - name: Output Run Number
-      run: echo ${{ github.run_number }}
-    - name: Output Run Attempt
-      run: echo ${{ github.run_attempt }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -47,15 +25,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish NuGet
-      run: dotnet pack
+      run: dotnet pack --no-build 
     - name: Setup GitHub Nuget
       run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/hounddog22030/index.json"
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
-  not_build:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - name: Another Step
-        run: echo "Hello"
-  
