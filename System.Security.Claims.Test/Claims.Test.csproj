@@ -1,17 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <RootNamespace>System</RootNamespace>
+
+    <IsPackable>false</IsPackable>
+	  <RootNamespace>System.Security.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 	  <AssemblyName>YadaYadaSoftware.$(RootNamespace)</AssemblyName>
-	  <IsPackable>false</IsPackable>
+	  <RepositoryUrl>https://github.com/hounddog22030/extensions.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Moq" Version="4.18.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System\System.csproj" />
+    <ProjectReference Include="..\System.Security.Claims\Claims.csproj" />
   </ItemGroup>
 
 </Project>
