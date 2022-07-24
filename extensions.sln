@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Printing", "System.Printing
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "System.IO\IO\IO.csproj", "{16B0390F-396A-4230-9973-8E45C3BEFEE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lambda.Core", "Amazon.Lambda.Core\Lambda.Core.csproj", "{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{05318AAA-DFF4-48B8-8B19-71A21EF13611} = {D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}
 		{D074A51E-8BC3-42D1-92B2-4FF5787086EC} = {05318AAA-DFF4-48B8-8B19-71A21EF13611}
 		{16B0390F-396A-4230-9973-8E45C3BEFEE6} = {D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}
+		{3890F8B1-FB6C-405C-BF7C-5B6F80FF2E88} = {1B54A874-82CD-4145-BC73-38CB9A2B16ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C9B63DA-A059-4EB7-A57C-8964D8A1011A}
