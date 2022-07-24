@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Amazon.Lambda.Core;
+namespace Amazon.Lambda.Core.Efs;
 
 public class EfsMountTemporaryDirectoryFactory : ITemporaryDirectoryFactory
 {

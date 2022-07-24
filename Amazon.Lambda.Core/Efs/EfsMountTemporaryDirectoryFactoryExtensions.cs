@@ -1,4 +1,5 @@
 ﻿using Amazon.Lambda.Core;
+using Amazon.Lambda.Core.Efs;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace

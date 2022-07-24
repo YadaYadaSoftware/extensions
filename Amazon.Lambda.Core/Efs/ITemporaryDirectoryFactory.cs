@@ -1,4 +1,4 @@
-﻿namespace Amazon.Lambda.Core;
+﻿namespace Amazon.Lambda.Core.Efs;
 
 public interface ITemporaryDirectoryFactory
 {
