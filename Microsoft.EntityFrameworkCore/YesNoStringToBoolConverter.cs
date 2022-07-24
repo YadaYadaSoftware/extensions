@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Microsoft.EntityFrameworkCore;
 
-public class StringToBoolConverter : TypeConverter
+public class YesNoStringToBoolConverter : TypeConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
     {

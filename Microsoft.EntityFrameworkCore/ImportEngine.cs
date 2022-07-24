@@ -23,7 +23,7 @@ public class ImportEngine<TContext, TEntity> : IImportEngine<TContext, TEntity> 
     static ImportEngine()
     {
         TypeDescriptor.AddAttributes(typeof(DateTime), new ConvertsAttribute(typeof(StringToDateTimeConverter)));
-        TypeDescriptor.AddAttributes(typeof(bool), new ConvertsAttribute(typeof(StringToBoolConverter)));
+        TypeDescriptor.AddAttributes(typeof(bool), new ConvertsAttribute(typeof(YesNoStringToBoolConverter)));
         TypeDescriptor.AddAttributes(typeof(decimal), new ConvertsAttribute(typeof(StringToDecimalConverter)));
         TypeDescriptor.AddAttributes(typeof(int), new ConvertsAttribute(typeof(IntConverter)));
     }
@@ -244,7 +244,7 @@ public class ImportEngine
     static ImportEngine()
     {
         TypeDescriptor.AddAttributes(typeof(DateTime), new ConvertsAttribute(typeof(StringToDateTimeConverter)));
-        TypeDescriptor.AddAttributes(typeof(bool), new ConvertsAttribute(typeof(StringToBoolConverter)));
+        TypeDescriptor.AddAttributes(typeof(bool), new ConvertsAttribute(typeof(YesNoStringToBoolConverter)));
         TypeDescriptor.AddAttributes(typeof(decimal), new ConvertsAttribute(typeof(StringToDecimalConverter)));
         TypeDescriptor.AddAttributes(typeof(int), new ConvertsAttribute(typeof(IntConverter)));
     }
