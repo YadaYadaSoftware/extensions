@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Amazon.SQS.Model;
+﻿using Amazon.SQS.Model;
 
-namespace YadaYada.Lambda.Services.Messaging;
+namespace Amazon.Lambda.SQSEvents;
 
 public interface ITenantQueueMessageService<TQueueReaderClass, TTargetClass, in TMessageType> 
     where TQueueReaderClass : class where TTargetClass : class where TMessageType : TenantBasedMessage

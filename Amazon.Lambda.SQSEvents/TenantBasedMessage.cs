@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Amazon.SQS.Model;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using Amazon.SQS.Model;
 
-namespace YadaYada.Lambda.Services.Messaging;
+namespace Amazon.Lambda.SQSEvents;
 
 
 public class TenantBasedMessage : SendMessageRequest

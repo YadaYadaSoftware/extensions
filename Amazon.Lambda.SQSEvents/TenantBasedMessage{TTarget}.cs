@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YadaYada.Lambda.Services.Messaging;
+﻿namespace Amazon.Lambda.SQSEvents;
 
 public class TenantBasedMessage<TTarget> : TenantBasedMessage
 {

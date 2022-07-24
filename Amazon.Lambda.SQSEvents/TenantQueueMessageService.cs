@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace YadaYada.Lambda.Services.Messaging;
+namespace Amazon.Lambda.SQSEvents;
 
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public sealed class TenantQueueMessageService<TQueueReaderClass, TTargetClass, TMessage> : ITenantQueueMessageService<TQueueReaderClass,TTargetClass, TMessage> where TTargetClass : class where TQueueReaderClass : class where TMessage : TenantBasedMessage

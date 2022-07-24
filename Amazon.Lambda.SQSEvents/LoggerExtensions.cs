@@ -1,6 +1,6 @@
-﻿using Amazon.Lambda.SQSEvents;
+﻿using Microsoft.Extensions.Logging;
 
-namespace Microsoft.Extensions.Logging;
+namespace Amazon.Lambda.SQSEvents;
 
 public static class LoggerExtensions
 {
