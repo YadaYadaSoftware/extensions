@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Amazon.Lambda.Core\Lambda.Core.csproj" />
+    <ProjectReference Include="..\Amazon.Lambda.Core\Core.csproj" />
   </ItemGroup>
 
 </Project>
