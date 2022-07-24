@@ -1,7 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace YadaYada.Lambda.Events.S3;
+namespace Amazon.Lambda.S3Events.Serialization;
 
 internal class ParseStringConverter : JsonConverter
 {

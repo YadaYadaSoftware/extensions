@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime.Internal.Util;
 using Amazon.S3.Model;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.Logging;
 
 public static class LoggerExtensions

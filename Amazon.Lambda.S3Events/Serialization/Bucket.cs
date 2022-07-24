@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace YadaYada.Lambda.Events.S3;
+namespace Amazon.Lambda.S3Events.Serialization;
 
 public partial class Bucket
 {
