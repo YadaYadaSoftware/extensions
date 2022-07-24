@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Printing", "Printing", "{05
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Printing", "System.Printing\Printing.csproj", "{D074A51E-8BC3-42D1-92B2-4FF5787086EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "System.IO\IO\IO.csproj", "{16B0390F-396A-4230-9973-8E45C3BEFEE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{D074A51E-8BC3-42D1-92B2-4FF5787086EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D074A51E-8BC3-42D1-92B2-4FF5787086EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D074A51E-8BC3-42D1-92B2-4FF5787086EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16B0390F-396A-4230-9973-8E45C3BEFEE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{D34CD28F-45C6-4253-8AD4-70DC7A61A15D} = {1B54A874-82CD-4145-BC73-38CB9A2B16ED}
 		{05318AAA-DFF4-48B8-8B19-71A21EF13611} = {D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}
 		{D074A51E-8BC3-42D1-92B2-4FF5787086EC} = {05318AAA-DFF4-48B8-8B19-71A21EF13611}
+		{16B0390F-396A-4230-9973-8E45C3BEFEE6} = {D2A85BB2-41C3-4FB7-8BA9-FCB91CF30964}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C9B63DA-A059-4EB7-A57C-8964D8A1011A}
