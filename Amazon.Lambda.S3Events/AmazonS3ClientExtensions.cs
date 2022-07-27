@@ -17,7 +17,8 @@ public static class AmazonS3ClientExtensions
 
         listObjectsV2Response.S3Objects.ForEach(o =>
         {
-            amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, String.Empty, cancellationToken);
+            var destinationKey = destinationFolder + o.Key.Replace(sourceFolder, string.Empty);
+            amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
         });
     }
 }

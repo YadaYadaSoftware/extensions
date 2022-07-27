@@ -16,7 +16,8 @@ namespace S3Events.Test
         public async void CopyFolderAsyncTest()
         {
             const string sourceBucket = "sourceBucket";
-            const string fileTxt = "sourcefolder/file.txt";
+            const string fileName = "file.txt";
+            const string txtFileFullPath = $"sourcefolder/{fileName}";
             const string sourceFolder = "sourcefolder/";
             const string destinationBucket = "destinationBucket";
             const string destinationFolder = "destinationFolder/";
@@ -25,13 +26,13 @@ namespace S3Events.Test
 
             var cancellationToken = new CancellationToken();
             var listObjectsV2Response = new ListObjectsV2Response();
-            listObjectsV2Response.S3Objects.Add(new S3Object{Key = fileTxt, BucketName = sourceBucket});
+            listObjectsV2Response.S3Objects.Add(new S3Object{Key = txtFileFullPath, BucketName = sourceBucket});
 
             s3.Setup(x => x.ListObjectsV2Async(It.Is<ListObjectsV2Request>(request => request.Prefix == sourceFolder), cancellationToken)).ReturnsAsync(listObjectsV2Response).Verifiable();
 
-            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileTxt, destinationBucket, It.IsAny<string>(), cancellationToken)).Verifiable();
+            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, txtFileFullPath, destinationBucket, destinationFolder + fileName, cancellationToken)).Verifiable();
 
-            await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, destinationBucket, string.Empty, cancellationToken);
+            await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, destinationBucket, destinationFolder, cancellationToken);
 
             s3.VerifyAll();
 
