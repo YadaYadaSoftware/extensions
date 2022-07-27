@@ -27,6 +27,6 @@ jobs:
     - name: Publish NuGet
       run: dotnet pack --no-build -p:PackageVersion=$V
     - name: Setup GitHub Nuget
-      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name YadaYadaSoftware "https://nuget.pkg.github.com/YadaYadaSoftware/index.json"
+      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name yadayadasoftware "https://nuget.pkg.github.com/yadayadasoftware/index.json"
     - name: Publish Package To GitHub
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "YadaYadaSoftware"
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "yadayadasoftware"
