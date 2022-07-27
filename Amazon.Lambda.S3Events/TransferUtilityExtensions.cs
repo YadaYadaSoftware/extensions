@@ -21,7 +21,10 @@ namespace Amazon.Lambda.S3Events
             }
             else if (s3Coordinates.StartsWith("arn"))
             {
-                throw new NotImplementedException();
+                var arnSplits = s3Coordinates.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var splits = arnSplits.Last().Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                bucket = splits[0];
+                key = string.Join('/', splits.Skip(1));
             }
             else
             {
