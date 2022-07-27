@@ -11,7 +11,23 @@ namespace Amazon.Lambda.S3Events
     {
         public static Task DownloadAsync(this ITransferUtility transfer, FileInfo fileInfo, string s3Coordinates)
         {
-            return transfer.DownloadAsync("/root/blah.zip","yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha","githubspike/2022.208.148/x/efbundle-linux-x64");
+            string bucket;
+            string key;
+            if (s3Coordinates.StartsWith("s3://"))
+            {
+                var splits = s3Coordinates.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                bucket = splits[1];
+                key = string.Join('/', splits.Skip(2));
+            }
+            else if (s3Coordinates.StartsWith("arn"))
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+            return transfer.DownloadAsync(fileInfo.FullName, bucket, key);
         }
     }
 }
