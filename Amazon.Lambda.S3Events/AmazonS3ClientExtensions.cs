@@ -33,16 +33,16 @@ public static class AmazonS3ClientExtensions
 
         try
         {
-            //arn:aws:s3:::yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.149/08e04cfc5303537482b899d2acf3def4.template
+            //s3://yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.156/blazor
             var sourceS3UrlParts = sourceS3Url.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceS3UrlParts),string.Join(',', sourceS3UrlParts)));
 
-            var sourceBucketName = sourceS3UrlParts[0];
+            var sourceBucketName = sourceS3UrlParts[1];
 
             loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceBucketName), sourceBucketName));
 
-            var sourceKey = string.Join('/', sourceS3UrlParts.Skip(1));
+            var sourceKey = string.Join('/', sourceS3UrlParts.Skip(2));
 
             loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceKey), sourceKey));
 
@@ -101,6 +101,7 @@ public static class AmazonS3ClientExtensions
 
                 try
                 {
+
                     tasks.Add(amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken));
 
                     incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
