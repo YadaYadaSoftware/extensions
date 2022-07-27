@@ -15,18 +15,21 @@ namespace S3Events.Test
         [Fact]
         public async void CopyFolderAsyncTest()
         {
-            var s3 = new Mock<IAmazonS3>();
             const string sourceBucket = "sourceBucket";
+            const string fileTxt = "sourcefolder/file.txt";
+            const string sourceFolder = "sourcefolder/";
+
+            var s3 = new Mock<IAmazonS3>();
 
             var cancellationToken = new CancellationToken();
             var listObjectsV2Response = new ListObjectsV2Response();
-            var fileTxt = "file.txt";
             listObjectsV2Response.S3Objects.Add(new S3Object(){Key = fileTxt, BucketName = sourceBucket});
-            s3.Setup(x => x.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), cancellationToken)).ReturnsAsync(listObjectsV2Response).Verifiable();
+
+            s3.Setup(x => x.ListObjectsV2Async(It.Is<ListObjectsV2Request>(request => request.Prefix == sourceFolder), cancellationToken)).ReturnsAsync(listObjectsV2Response).Verifiable();
 
             s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileTxt, It.IsAny<string>(), It.IsAny<string>(), cancellationToken)).Verifiable();
 
-            await s3.Object.CopyFolderAsync(sourceBucket, string.Empty, string.Empty, string.Empty, cancellationToken);
+            await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, string.Empty, string.Empty, cancellationToken);
 
             s3.VerifyAll();
 
