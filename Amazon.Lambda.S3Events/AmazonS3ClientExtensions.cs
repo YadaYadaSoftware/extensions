@@ -11,6 +11,8 @@ public static class AmazonS3ClientExtensions
         string destinationFolder,
         CancellationToken cancellationToken = default(CancellationToken))
     {
-        await amazonS3.ListObjectsV2Async(new ListObjectsV2Request(), cancellationToken);
+        var listObjectsV2Response = await amazonS3.ListObjectsV2Async(new ListObjectsV2Request(), cancellationToken);
+
+        listObjectsV2Response.S3Objects.ForEach(o => amazonS3.CopyObjectAsync(o.BucketName, o.Key, string.Empty, String.Empty, cancellationToken));
     }
 }
