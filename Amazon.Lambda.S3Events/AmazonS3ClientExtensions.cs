@@ -6,20 +6,21 @@ namespace Amazon.Lambda.S3Events;
 
 public static class AmazonS3ClientExtensions
 {
-    public static Task CopyFolderAsync(this IAmazonS3 amazonS3, string sourceArn,
+    public static Task CopyFolderAsync(this IAmazonS3 amazonS3, string sourceS3Url,
         string destinationBucket,
         string destinationFolder,
         CancellationToken cancellationToken = default(CancellationToken),
         ILogger? logger = default)
     {
 
+        //s3://yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.152/blazor
         AggregateScope? loggerAggregateScope = null;
 
         if (logger != null)
         {
             loggerAggregateScope = new AggregateScope();
             loggerAggregateScope.Add(logger.AddMember());
-            loggerAggregateScope.Add(logger.AddScope(nameof(sourceArn), sourceArn));
+            loggerAggregateScope.Add(logger.AddScope(nameof(sourceS3Url), sourceS3Url));
             loggerAggregateScope.Add(logger.AddScope(nameof(destinationBucket), destinationBucket));
             loggerAggregateScope.Add(logger.AddScope(nameof(destinationFolder), destinationFolder));
         }
@@ -27,15 +28,15 @@ public static class AmazonS3ClientExtensions
         try
         {
             //arn:aws:s3:::yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.149/08e04cfc5303537482b899d2acf3def4.template
-            var sourceArnParts = sourceArn.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var sourceS3UrlParts = sourceS3Url.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceArnParts),string.Join(',', sourceArnParts)));
+            loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceS3UrlParts),string.Join(',', sourceS3UrlParts)));
 
-            var sourceBucketName = sourceArnParts[3];
+            var sourceBucketName = sourceS3UrlParts[0];
 
             loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceBucketName), sourceBucketName));
 
-            var sourceKey = string.Join('/', sourceArnParts.Skip(4));
+            var sourceKey = string.Join('/', sourceS3UrlParts.Skip(1));
 
             loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceKey), sourceKey));
 
