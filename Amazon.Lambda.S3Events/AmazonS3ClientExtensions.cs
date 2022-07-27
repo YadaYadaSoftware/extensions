@@ -10,10 +10,16 @@ public static class AmazonS3ClientExtensions
         string destinationBucket,
         string destinationFolder,
         CancellationToken cancellationToken = default(CancellationToken),
-        ILogger? logger = default)
+        ILogger logger = default)
     {
+        if (amazonS3 == null) throw new ArgumentNullException(nameof(amazonS3));
+        if (sourceS3Url == null) throw new ArgumentNullException(nameof(sourceS3Url));
+        if (destinationBucket == null) throw new ArgumentNullException(nameof(destinationBucket));
+        if (destinationFolder == null) throw new ArgumentNullException(nameof(destinationFolder));
+        if (string.IsNullOrEmpty(sourceS3Url)) throw new ArgumentException("Value cannot be null or empty.", nameof(sourceS3Url));
+        if (string.IsNullOrEmpty(destinationBucket)) throw new ArgumentException("Value cannot be null or empty.", nameof(destinationBucket));
+        if (string.IsNullOrEmpty(destinationFolder)) throw new ArgumentException("Value cannot be null or empty.", nameof(destinationFolder));
 
-        //s3://yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.152/blazor
         AggregateScope? loggerAggregateScope = null;
 
         if (logger != null)
