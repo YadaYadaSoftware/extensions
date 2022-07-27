@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <AssemblyName>YadaYadaSoftware.$(RootNamespace)</AssemblyName>
-	  <RepositoryUrl>https://github.com/hounddog22030/extensions.git</RepositoryUrl>
+	  <RepositoryUrl>https://github.com/YadaYadaSoftware/extensions.git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <RootNamespace>System.Reflection</RootNamespace>
-	  <RepositoryUrl>https://github.com/hounddog22030/extensions.git</RepositoryUrl>
+	  <RepositoryUrl>https://github.com/YadaYadaSoftware/extensions.git</RepositoryUrl>
 	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
