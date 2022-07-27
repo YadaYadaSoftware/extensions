@@ -12,7 +12,7 @@ public static class AmazonS3ClientExtensions
         CancellationToken cancellationToken = default(CancellationToken))
     {
         var listObjectsV2Response = await amazonS3.ListObjectsV2Async(
-            new ListObjectsV2Request{Prefix = sourceFolder}, 
+            new ListObjectsV2Request{BucketName = sourceBucket, Prefix = sourceFolder}, 
             cancellationToken);
 
         listObjectsV2Response.S3Objects.ForEach(o =>
