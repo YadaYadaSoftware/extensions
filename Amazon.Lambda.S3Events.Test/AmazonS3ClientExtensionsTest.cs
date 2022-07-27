@@ -18,18 +18,20 @@ namespace S3Events.Test
             const string sourceBucket = "sourceBucket";
             const string fileTxt = "sourcefolder/file.txt";
             const string sourceFolder = "sourcefolder/";
+            const string destinationBucket = "destinationBucket";
+            const string destinationFolder = "destinationFolder/";
 
             var s3 = new Mock<IAmazonS3>();
 
             var cancellationToken = new CancellationToken();
             var listObjectsV2Response = new ListObjectsV2Response();
-            listObjectsV2Response.S3Objects.Add(new S3Object(){Key = fileTxt, BucketName = sourceBucket});
+            listObjectsV2Response.S3Objects.Add(new S3Object{Key = fileTxt, BucketName = sourceBucket});
 
             s3.Setup(x => x.ListObjectsV2Async(It.Is<ListObjectsV2Request>(request => request.Prefix == sourceFolder), cancellationToken)).ReturnsAsync(listObjectsV2Response).Verifiable();
 
-            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileTxt, It.IsAny<string>(), It.IsAny<string>(), cancellationToken)).Verifiable();
+            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileTxt, destinationBucket, It.IsAny<string>(), cancellationToken)).Verifiable();
 
-            await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, string.Empty, string.Empty, cancellationToken);
+            await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, destinationBucket, string.Empty, cancellationToken);
 
             s3.VerifyAll();
 
