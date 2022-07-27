@@ -87,9 +87,9 @@ public static class AmazonS3ClientExtensions
                 new ListObjectsV2Request {BucketName = sourceBucket, Prefix = sourceFolder},
                 cancellationToken);
 
-            var tasks = new List<Task>();
+            //var tasks = new List<Task>();
 
-            Task[] incompleteTasks;
+            //Task[] incompleteTasks;
 
             listObjectsV2Response.S3Objects.ForEach(async o =>
             {
@@ -101,15 +101,16 @@ public static class AmazonS3ClientExtensions
 
                 try
                 {
+                    var task = amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
+                    await task;
+                    //tasks.Add(task);
 
-                    tasks.Add(amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken));
-
-                    incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
-                    while (incompleteTasks.Length > 20)
-                    {
-                        await Task.WhenAny(incompleteTasks);
-                        incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
-                    }
+                    //incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
+                    //while (incompleteTasks.Length > 20)
+                    //{
+                    //    await Task.WhenAny(incompleteTasks);
+                    //    incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
+                    //}
 
                 }
                 catch (Exception e)
@@ -127,9 +128,9 @@ public static class AmazonS3ClientExtensions
                 }
             });
 
-            incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
+            //incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
 
-            await Task.WhenAll(incompleteTasks);
+            //await Task.WhenAll(incompleteTasks);
 
         }
         catch (Exception e)
