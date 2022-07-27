@@ -6,6 +6,53 @@ namespace Amazon.Lambda.S3Events;
 
 public static class AmazonS3ClientExtensions
 {
+    public static Task CopyFolderAsync(this IAmazonS3 amazonS3, string sourceArn,
+        string destinationBucket,
+        string destinationFolder,
+        CancellationToken cancellationToken = default(CancellationToken),
+        ILogger? logger = default)
+    {
+
+        AggregateScope? loggerAggregateScope = null;
+
+        if (logger != null)
+        {
+            loggerAggregateScope = new AggregateScope();
+            loggerAggregateScope.Add(logger.AddMember());
+            loggerAggregateScope.Add(logger.AddScope(nameof(sourceArn), sourceArn));
+            loggerAggregateScope.Add(logger.AddScope(nameof(destinationBucket), destinationBucket));
+            loggerAggregateScope.Add(logger.AddScope(nameof(destinationFolder), destinationFolder));
+        }
+
+        try
+        {
+            //arn:aws:s3:::yadayada-master-deploy-codepipelinebucket-18vmytr5wzbha/githubspike/2022.208.149/08e04cfc5303537482b899d2acf3def4.template
+            var sourceArnParts = sourceArn.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceArnParts),string.Join(',', sourceArnParts)));
+
+            var sourceBucketName = sourceArnParts[3];
+
+            loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceBucketName), sourceBucketName));
+
+            var sourceKey = string.Join('/', sourceArnParts.Skip(4));
+
+            loggerAggregateScope?.Add(logger?.AddScope(nameof(sourceKey), sourceKey));
+
+
+            return CopyFolderAsync(amazonS3, sourceBucketName, sourceKey, destinationBucket, destinationFolder, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            logger?.LogError(e,e.ToString());
+            throw;
+        }
+        finally
+        {
+            loggerAggregateScope?.Dispose();
+        }
+    }
+
     public static async Task CopyFolderAsync(this IAmazonS3 amazonS3, string sourceBucket,
         string sourceFolder,
         string destinationBucket,
