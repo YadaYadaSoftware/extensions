@@ -18,6 +18,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    - name: Setup GitHub Nuget
+      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name yadayadasoftware "https://nuget.pkg.github.com/yadayadasoftware/index.json"
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -26,7 +28,5 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Publish NuGet
       run: dotnet pack --no-build -p:PackageVersion=$V
-    - name: Setup GitHub Nuget
-      run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name yadayadasoftware "https://nuget.pkg.github.com/yadayadasoftware/index.json"
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "yadayadasoftware"
