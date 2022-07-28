@@ -7,14 +7,14 @@ namespace Amazon.SimpleSystemsManagement
     public static class IAmazonSimpleSystemsManagementExtensions
     {
         // ReSharper disable once UnusedMember.Global
-        public static async Task<string> GetValue(this IAmazonSimpleSystemsManagement client, string parameterPath)
+        public static async Task<string> GetParameterValueAsync(this IAmazonSimpleSystemsManagement client, string parameterPath)
         {
             var value = await client.GetParameterAsync(new GetParameterRequest {Name = parameterPath, WithDecryption = true});
             return value.Parameter.Value;
         }
 
         // ReSharper disable once UnusedMember.Global
-        public static async Task<bool> Exists(this IAmazonSimpleSystemsManagement client, string parameterPath)
+        public static async Task<bool> ParameterExistsAsync(this IAmazonSimpleSystemsManagement client, string parameterPath)
         {
             var results = await client.DescribeParametersAsync(new DescribeParametersRequest {ParameterFilters = new List<ParameterStringFilter> {new ParameterStringFilter {Key = "Name", Values = new List<string> {parameterPath}}}});
             return results.Parameters.Any();
