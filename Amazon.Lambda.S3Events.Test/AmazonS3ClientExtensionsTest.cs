@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon.Lambda.S3Events;
@@ -33,8 +34,8 @@ namespace S3Events.Test
 
             s3.Setup(x => x.ListObjectsV2Async(It.Is<ListObjectsV2Request>(request => request.Prefix == sourceFolder && request.BucketName == sourceBucket), cancellationToken)).ReturnsAsync(listObjectsV2Response).Verifiable();
 
-            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileNamePath1, destinationBucket, destinationFolder + fileName1, cancellationToken)).Verifiable();
-            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileNamePath2, destinationBucket, destinationFolder + $"anotherfolder/anotherfolder/{fileName2}", cancellationToken)).Verifiable();
+            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileNamePath1, destinationBucket, destinationFolder + fileName1, cancellationToken)).ReturnsAsync(new CopyObjectResponse{HttpStatusCode = HttpStatusCode.OK}).Verifiable();
+            s3.Setup(amazonS3 => amazonS3.CopyObjectAsync(sourceBucket, fileNamePath2, destinationBucket, destinationFolder + $"anotherfolder/anotherfolder/{fileName2}", cancellationToken)).ReturnsAsync(new CopyObjectResponse { HttpStatusCode = HttpStatusCode.OK }).Verifiable();
 
             await s3.Object.CopyFolderAsync(sourceBucket, sourceFolder, destinationBucket, destinationFolder, cancellationToken);
 
