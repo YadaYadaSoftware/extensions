@@ -85,60 +85,48 @@ public static class AmazonS3ClientExtensions
         {
             if (!destinationFolder.EndsWith('/')) destinationFolder += '/';
             if (!sourceFolder.EndsWith('/')) sourceFolder += '/';
-            var listObjectsV2Response = await amazonS3.ListObjectsV2Async(
-                new ListObjectsV2Request {BucketName = sourceBucket, Prefix = sourceFolder},
-                cancellationToken);
+            
+            ListObjectsV2Response listObjectsV2Response = new ListObjectsV2Response();
 
-            //var tasks = new List<Task>();
-
-            //Task[] incompleteTasks;
-
-            listObjectsV2Response.S3Objects.ForEach(async o =>
+            do
             {
-                var addScopeKey = logger?.AddScope(nameof(o.Key), o.Key);
-                loggerAggregateScope?.Add(addScopeKey);
-                var destinationKey = destinationFolder + o.Key.Replace(sourceFolder, string.Empty);
-                var addScopeDestinationKey = logger?.AddScope(nameof(destinationKey), destinationKey);
-                while (destinationKey.Contains("//"))
+                listObjectsV2Response = await amazonS3.ListObjectsV2Async(new ListObjectsV2Request {BucketName = sourceBucket, Prefix = sourceFolder, ContinuationToken = listObjectsV2Response.ContinuationToken, MaxKeys = 1000 }, cancellationToken);
+
+                listObjectsV2Response.S3Objects.ForEach(async o =>
                 {
-                    destinationKey = destinationKey.Replace("//", "/");
-                }
-                loggerAggregateScope?.Add(addScopeDestinationKey);
+                    var addScopeKey = logger?.AddScope(nameof(o.Key), o.Key);
+                    loggerAggregateScope?.Add(addScopeKey);
+                    var destinationKey = destinationFolder + o.Key.Replace(sourceFolder, string.Empty);
+                    var addScopeDestinationKey = logger?.AddScope(nameof(destinationKey), destinationKey);
+                    while (destinationKey.Contains("//"))
+                    {
+                        destinationKey = destinationKey.Replace("//", "/");
+                    }
 
-                try
-                {
+                    loggerAggregateScope?.Add(addScopeDestinationKey);
 
-                    var r = await amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
-                    if (r.HttpStatusCode != HttpStatusCode.OK) throw new InvalidOperationException(string.Join('|', r.ResponseMetadata));
-                    //tasks.Add(task);
+                    try
+                    {
 
-                    //incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
-                    //while (incompleteTasks.Length > 20)
-                    //{
-                    //    await Task.WhenAny(incompleteTasks);
-                    //    incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
-                    //}
+                        var r = await amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
+                        if (r.HttpStatusCode != HttpStatusCode.OK) throw new InvalidOperationException(string.Join('|', r.ResponseMetadata));
+                    }
+                    catch (Exception e)
+                    {
+                        logger?.LogError(e, $"{o.BucketName}/{o.Key}:{e}");
 
-                }
-                catch (Exception e)
-                {
-                    logger?.LogError(e, $"{o.BucketName}/{o.Key}:{e}");
+                        throw;
+                    }
+                    finally
+                    {
+                        loggerAggregateScope?.Remove(addScopeKey);
+                        addScopeKey?.Dispose();
+                        loggerAggregateScope?.Remove(addScopeDestinationKey);
+                        addScopeDestinationKey?.Dispose();
+                    }
+                });
 
-                    throw;
-                }
-                finally
-                {
-                    loggerAggregateScope?.Remove(addScopeKey);
-                    addScopeKey?.Dispose();
-                    loggerAggregateScope?.Remove(addScopeDestinationKey);
-                    addScopeDestinationKey?.Dispose();
-                }
-            });
-
-            //incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
-
-            //await Task.WhenAll(incompleteTasks);
-
+            } while (listObjectsV2Response.IsTruncated);
         }
         catch (Exception e)
         {
