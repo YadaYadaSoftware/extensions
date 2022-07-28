@@ -79,12 +79,12 @@ public static class AmazonS3ClientExtensions
             loggerAggregateScope.Add(logger.AddScope(nameof(sourceFolder), sourceFolder));
             loggerAggregateScope.Add(logger.AddScope(nameof(destinationBucket), destinationBucket));
             loggerAggregateScope.Add(logger.AddScope(nameof(destinationFolder), destinationFolder));
-
         }
 
         try
         {
-            if (!destinationFolder.EndsWith("/")) destinationFolder += "/";
+            if (!destinationFolder.EndsWith('/')) destinationFolder += '/';
+            if (!sourceFolder.EndsWith('/')) sourceFolder += '/';
             var listObjectsV2Response = await amazonS3.ListObjectsV2Async(
                 new ListObjectsV2Request {BucketName = sourceBucket, Prefix = sourceFolder},
                 cancellationToken);
@@ -99,6 +99,10 @@ public static class AmazonS3ClientExtensions
                 loggerAggregateScope?.Add(addScopeKey);
                 var destinationKey = destinationFolder + o.Key.Replace(sourceFolder, string.Empty);
                 var addScopeDestinationKey = logger?.AddScope(nameof(destinationKey), destinationKey);
+                while (destinationKey.Contains("//"))
+                {
+                    destinationKey = destinationKey.Replace("//", "/");
+                }
                 loggerAggregateScope?.Add(addScopeDestinationKey);
 
                 try
