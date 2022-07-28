@@ -13,16 +13,25 @@ namespace Amazon.CloudFormation
     // ReSharper disable once UnusedMember.Global
     public static class IAmazonCloudFormationExtensions
     {
-        public static async Task<string> GetTemplateBody(this IAmazonCloudFormation cloudFormation, string stackName)
+        // ReSharper disable once UnusedMember.Global
+        public static async Task<string> GetTemplateAsync(this IAmazonCloudFormation cloudFormation, string masterStack, string nestedStackLogicalId)
+        {
+            var nestedStack = await cloudFormation.DescribeStackResourceAsync(new DescribeStackResourceRequest {StackName = masterStack, LogicalResourceId = nestedStackLogicalId});
+
+            var template = await cloudFormation.GetTemplateAsync(nestedStack.StackResourceDetail.PhysicalResourceId);
+
+            return template;
+        }
+        public static async Task<string> GetTemplateAsync(this IAmazonCloudFormation cloudFormation, string stackName)
         {
             var templateResponse = await cloudFormation.GetTemplateAsync(new GetTemplateRequest() { StackName = stackName, TemplateStage = TemplateStage.Original });
             return templateResponse.TemplateBody;
         }
 
         // ReSharper disable once UnusedMember.Global
-        public static async Task<Uri> GetTemplateUrl(this IAmazonCloudFormation amazonCloudFormation, string stackName, string resourceName)
+        public static async Task<Uri> GetTemplateUrlAsync(this IAmazonCloudFormation amazonCloudFormation, string stackName, string resourceName)
         {
-            var templateBody = await amazonCloudFormation.GetTemplateBody(stackName);
+            var templateBody = await amazonCloudFormation.GetTemplateAsync(stackName);
             var templateNode = JsonNode.Parse(templateBody);
             ArgumentNullException.ThrowIfNull(templateNode, nameof(templateNode));
             var resources = templateNode["Resources"];
