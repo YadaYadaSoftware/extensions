@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using System.Net;
+using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Extensions.Logging;
 
@@ -83,6 +84,7 @@ public static class AmazonS3ClientExtensions
 
         try
         {
+            if (!destinationFolder.EndsWith("/")) destinationFolder += "/";
             var listObjectsV2Response = await amazonS3.ListObjectsV2Async(
                 new ListObjectsV2Request {BucketName = sourceBucket, Prefix = sourceFolder},
                 cancellationToken);
@@ -101,8 +103,9 @@ public static class AmazonS3ClientExtensions
 
                 try
                 {
-                    var task = amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
-                    await task;
+
+                    var r = await amazonS3.CopyObjectAsync(o.BucketName, o.Key, destinationBucket, destinationKey, cancellationToken);
+                    if (r.HttpStatusCode != HttpStatusCode.OK) throw new InvalidOperationException(string.Join('|', r.ResponseMetadata));
                     //tasks.Add(task);
 
                     //incompleteTasks = tasks.Where(_ => !_.IsCompleted).ToArray();
@@ -115,7 +118,7 @@ public static class AmazonS3ClientExtensions
                 }
                 catch (Exception e)
                 {
-                    logger?.LogError(e, e.ToString());
+                    logger?.LogError(e, $"{o.BucketName}/{o.Key}:{e}");
 
                     throw;
                 }
