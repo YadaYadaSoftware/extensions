@@ -8,7 +8,8 @@ using YadaYada.BuildTools.Cli.ProjectMetadata;
 
 namespace YadaYada.BuildTools.Cli
 {
-    public class UpdateProjectReferencesCommand
+    [Verb("update-project-reference")]
+    public class UpdateProjectReferencesCommand : CommandBase
     {
         [Option('p', "project-path", Required = true, HelpText = "Project Path")]
         public string ProjectPath { get; set; }
@@ -36,6 +37,14 @@ namespace YadaYada.BuildTools.Cli
             Project.Save(p,outputFileInfo);
             Console.WriteLine(File.ReadAllText(outputFileInfo.FullName));
             
+        }
+
+        public override Task ApplyAsync()
+        {
+            Console.WriteLine($"Update {this.ProjectPath}");
+            this.Output = this.Output ?? this.ProjectPath;
+            UpdateProjectReferencesCommand.Process(this.ProjectPath, this.Output);
+            return Task.CompletedTask;
         }
     }
 }

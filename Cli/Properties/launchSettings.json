@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Cli": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "commandLineArgs": "update-template-url -t c:\\\\temp -u s3://blah/blah.template -r Stack"
+    }
+  }
+}
