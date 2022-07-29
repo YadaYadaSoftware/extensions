@@ -9,8 +9,9 @@
     <PackageId>YadaYadaSoftware.BuildTools.$(AssemblyName)</PackageId>
 	  <PackAsTool>true</PackAsTool>
 	  <ToolCommandName>dotnet-yadayada</ToolCommandName>  </PropertyGroup>
+	<RepositoryUrl>https://github.com/YadaYadaSoftware/extensions.git</RepositoryUrl>
 
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="YadaYadaSoftware.Amazon.CloudFormation" Version="1.210.103" />
   </ItemGroup>
