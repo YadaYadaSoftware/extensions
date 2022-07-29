@@ -42,6 +42,7 @@ namespace Amazon.CloudFormation
             ArgumentNullException.ThrowIfNull(properties, nameof(properties));
             var templateUrl = properties["TemplateURL"];
             ArgumentNullException.ThrowIfNull(templateUrl, nameof(templateUrl));
+
             return new Uri(templateUrl.ToString());
 
         }
