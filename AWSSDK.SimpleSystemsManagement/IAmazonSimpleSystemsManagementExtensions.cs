@@ -29,7 +29,6 @@ namespace Amazon.SimpleSystemsManagement
                         new ParameterStringFilter
                         {
                             Key = "Name",
-                            Option = null,
                             Values = new List<string>
                             {
                                 parameterPath
