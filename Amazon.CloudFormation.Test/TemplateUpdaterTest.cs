@@ -40,9 +40,9 @@ namespace Amazon.CloudFormation.Test
         [Fact]
         public async void UpdateFileNotFound()
         {
-            Action action = () => TemplateUpdater.UpdateTemplateAsync(new FileInfo(Path.GetRandomFileName()), "s", "s", "s");
+            Func<Task> action = () => TemplateUpdater.UpdateTemplateAsync(new FileInfo(Path.GetRandomFileName()), "s", "s", "s");
 
-            action.Should().Throw<FileNotFoundException>();
+            await action.Should().ThrowAsync<FileNotFoundException>();
         }
     }
 }
