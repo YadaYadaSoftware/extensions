@@ -35,8 +35,7 @@ namespace Amazon.SimpleSystemsManagement
                             Values = new List<string>
                             {
                                 parameterPath
-                            },
-                            Option = "Equals"
+                            }
                         }
                     }
                 };
