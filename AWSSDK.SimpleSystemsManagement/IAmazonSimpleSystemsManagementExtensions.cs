@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using Amazon.SimpleSystemsManagement.Model;
 
 namespace Amazon.SimpleSystemsManagement
@@ -37,6 +38,7 @@ namespace Amazon.SimpleSystemsManagement
                         }
                     }
                 };
+                Debugger.Launch();
                 Console.WriteLine($"{nameof(ParameterExistsAsync)}{nameof(describeParametersRequest)}='{JsonSerializer.Serialize(describeParametersRequest)}'");
 
                 var describeParametersResponse = await client.DescribeParametersAsync(
