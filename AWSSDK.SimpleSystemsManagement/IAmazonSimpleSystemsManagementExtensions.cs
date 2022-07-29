@@ -28,11 +28,12 @@ namespace Amazon.SimpleSystemsManagement
                     {
                         new ParameterStringFilter
                         {
-                            Key = "Name",
+                            Key = "Path",
                             Values = new List<string>
                             {
                                 parameterPath
-                            }
+                            },
+                            Option = "Equals"
                         }
                     }
                 };
