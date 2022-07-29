@@ -18,7 +18,6 @@ namespace Amazon.SimpleSystemsManagement
         // ReSharper disable once UnusedMember.Global
         public static async Task<bool> ParameterExistsAsync(this IAmazonSimpleSystemsManagement client, string parameterPath, CancellationToken cancellationToken = default(CancellationToken))
         {
-            Debugger.Launch();
 
             try
             {
@@ -26,22 +25,8 @@ namespace Amazon.SimpleSystemsManagement
                 if (parameterPath == null) throw new ArgumentNullException(nameof(parameterPath));
                 Console.WriteLine($"{nameof(ParameterExistsAsync)}{nameof(parameterPath)}='{parameterPath}'");
 
-                try
-                {
-                    var value = await client.GetParameterAsync(new GetParameterRequest { Name = parameterPath });
 
-                    return true;
-
-                }
-                catch (Exception e)
-                {
-
-                    return false;
-                    throw;
-                }                
-
-                var describeParametersRequest = new DescribeParametersRequest
-                {
+                var describeParametersRequest = new DescribeParametersRequest {
                     ParameterFilters = new List<ParameterStringFilter>
                     {
                         new ParameterStringFilter
@@ -55,7 +40,7 @@ namespace Amazon.SimpleSystemsManagement
                         }
                     }
                 };
-                Debugger.Launch();
+
                 Console.WriteLine($"{nameof(ParameterExistsAsync)}{nameof(describeParametersRequest)}='{JsonSerializer.Serialize(describeParametersRequest)}'");
 
                 DescribeParametersResponse? describeParametersResponse = await client.DescribeParametersAsync(describeParametersRequest, cancellationToken);
