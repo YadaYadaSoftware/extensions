@@ -45,5 +45,7 @@ namespace Amazon.CloudFormation
             return new Uri(templateUrl.ToString());
 
         }
+
+
     }
 }

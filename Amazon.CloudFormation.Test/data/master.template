@@ -1,0 +1,232 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application.",
+  "Globals": {
+    "Function": {
+      "Runtime": "dotnet6",
+      "Architectures": [
+        "arm64"
+      ],
+      "Environment": {
+        "Variables": {
+          "LAMBDA_NET_SERIALIZER_DEBUG": true
+        }
+      }
+    }
+  },
+  "Conditions": {
+    "CreateGreen": {
+      "Fn::Equals": [
+        {
+          "Ref": "AlwaysBlue"
+        },
+        "false"
+      ]
+    }
+  },
+  "Parameters": {
+    "AlwaysBlue": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/notabranch/AlwaysBlue"
+    },
+    "BlueGreen": {
+      "Type": "String",
+      "Default": "Blue"
+    },
+    "LambdaSubnets": {
+      "Type": "List<AWS::EC2::Subnet::Id>",
+      "Default": "subnet-0bb0331e2ba1719c3,subnet-07c52b3593179dd10"
+    },
+    "LambdaSecurityGroup": {
+      "Type": "List<AWS::EC2::SecurityGroup::Id>",
+      "Default": "sg-0b1a5d75f91c0852f"
+    },
+    "ExecId": {
+      "Type": "String",
+      "Default": "NotAnExecId"
+    },
+    "Host": {
+      "Type": "String",
+      "Default": "notahost"
+    },
+    "HostedZoneId": {
+      "Type": "AWS::Route53::HostedZone::Id",
+      "Default": "Z09682693OYXYXAKEPH07"
+    },
+    "Branch": {
+      "Type": "String",
+      "Default": "NotABranch"
+    },
+    "NormalizedBranch": {
+      "Type": "String",
+      "Default": "NotABranch"
+    },
+    "LambdaExecutionRole": {
+      "Type": "String",
+      "Default": "arn:aws:iam::768033286672:role/yadayada-master-deploy-LambdaExecutionRole-HYJT9XKQ0LKN"
+    },
+    "WebZipSourceKey": {
+      "Type": "String",
+      "Default": "NotAWebZipSourceKey"
+    },
+    "SourceLocationArn": {
+      "Type": "String",
+      "Default": "NotAArn"
+    }
+  },
+  "Resources": {
+    "ApplicationFolderSsm": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "/${Host}/ApplicationFolder"
+        },
+        "Value": {
+          "Ref": "ExecId"
+        },
+        "Type": "String"
+      }
+    },
+    "SqlServerInitialCatalog": {
+      "Type": "AWS::SSM::Parameter",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "/${Host}/SqlConnectionStringBuilder/InitialCatalog"
+        },
+        "Value": {
+          "Ref": "NormalizedBranch"
+        },
+        "Type": "String"
+      }
+    },
+    "Data": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": [
+        "SqlServerInitialCatalog"
+      ],
+      "Properties": {
+        "TimeoutInMinutes": 30,
+        "TemplateURL": "../../bbdata/Data.Serverless/data.template",
+        "Parameters": {
+          "Host": {
+            "Ref": "Host"
+          }
+        }
+      }
+    },
+    "Blue": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TimeoutInMinutes": 5,
+        "TemplateURL": "../../bbapi/WebApi/blue.webapi.template"
+      }
+    },
+    "Green": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Condition": "CreateGreen",
+      "Properties": {
+        "TimeoutInMinutes": 5,
+        "TemplateURL": "../../bbapi/WebApi/green.webapi.template"
+      }
+    },
+    "Distribution": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": [
+        "Data"
+      ],
+      "Properties": {
+        "TemplateURL": "../Deploy.Distribution/distribution.template",
+        "TimeoutInMinutes": 20,
+        "Parameters": {
+          "HostedZoneId": {
+            "Ref": "HostedZoneId"
+          },
+          "Host": {
+            "Fn::Sub": "${Host}"
+          },
+          "BlueApi": {
+            "Fn::GetAtt": [
+              "Blue",
+              "Outputs.Api"
+            ]
+          },
+          "GreenApi": {
+            "Fn::If": [
+              "CreateGreen",
+              {
+                "Fn::GetAtt": [
+                  "Green",
+                  "Outputs.Api"
+                ]
+              },
+              "null"
+            ]
+          },
+          "ExecId": {
+            "Ref": "ExecId"
+          },
+          "LambdaSecurityGroup": {
+            "Fn::Join": [
+              ",",
+              {
+                "Ref": "LambdaSecurityGroup"
+              }
+            ]
+          },
+          "LambdaSubnets": {
+            "Fn::Join": [
+              ",",
+              {
+                "Ref": "LambdaSubnets"
+              }
+            ]
+          },
+          "LambdaExecutionRole": {
+            "Ref": "LambdaExecutionRole"
+          },
+          "Branch": {
+            "Ref": "Branch"
+          },
+          "WebZipSourceKey": {
+            "Ref": "WebZipSourceKey"
+          },
+          "BlueGreen": {
+            "Ref": "BlueGreen"
+          },
+          "AlwaysBlue": {
+            "Ref": "AlwaysBlue"
+          }
+        }
+      }
+    },
+    "DeployMasterBuildBuildFunctionsRunBuildGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations"
+      },
+      "Properties": {
+        "CodeUri": ".",
+        "MemorySize": 128,
+        "Timeout": 900,
+        "PackageType": "Zip",
+        "Handler": "Deploy.Master::Deploy.Master.Build.BuildFunctions_RunBuild_Generated::RunBuild",
+        "Environment": {
+          "Variables": {
+            "LAMBDA_NET_SERIALIZER_DEBUG": true
+          }
+        },
+        "Policies": [
+          "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "AlwaysBlue": {
+      "Value": {
+        "Ref": "AlwaysBlue"
+      }
+    }
+  }
+}
