@@ -1,4 +1,5 @@
-﻿using Amazon.SimpleSystemsManagement.Model;
+﻿using System.Text.Json;
+using Amazon.SimpleSystemsManagement.Model;
 
 namespace Amazon.SimpleSystemsManagement
 {
@@ -18,17 +19,28 @@ namespace Amazon.SimpleSystemsManagement
         {
             try
             {
-                Console.WriteLine(nameof(ParameterExistsAsync));
-                var describeParametersResponse = await client.DescribeParametersAsync(new()
+                if (client == null) throw new ArgumentNullException(nameof(client));
+                if (parameterPath == null) throw new ArgumentNullException(nameof(parameterPath));
+                Console.WriteLine($"{nameof(ParameterExistsAsync)}{nameof(parameterPath)}='{parameterPath}'");
+                var describeParametersRequest = new DescribeParametersRequest
                 {
-                    ParameterFilters = new() {new()
-            {
-                Key = "Name", Values = new()
-                {
-                    parameterPath
-                }
-            }}
-                });
+                    ParameterFilters = new List<ParameterStringFilter>
+                    {
+                        new ParameterStringFilter
+                        {
+                            Key = "Name",
+                            Option = null,
+                            Values = new List<string>
+                            {
+                                parameterPath
+                            }
+                        }
+                    }
+                };
+                Console.WriteLine($"{nameof(ParameterExistsAsync)}{nameof(describeParametersRequest)}='{JsonSerializer.Serialize(describeParametersRequest)}'");
+
+                var describeParametersResponse = await client.DescribeParametersAsync(
+                    describeParametersRequest);
                 Console.WriteLine($"{nameof(ParameterExistsAsync)}:{nameof(describeParametersResponse)}={describeParametersResponse}");
 
 
