@@ -28,7 +28,7 @@ namespace Amazon.SimpleSystemsManagement
 
                 try
                 {
-                    var value = await client.GetParameterAsync(new GetParameterRequest { Name = parameterPath, WithDecryption = true }, cancellationToken);
+                    var value = await client.GetParameterAsync(new GetParameterRequest { Name = parameterPath }, cancellationToken);
 
                     return true;
 
