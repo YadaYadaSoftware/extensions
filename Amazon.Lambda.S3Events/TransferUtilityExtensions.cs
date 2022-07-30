@@ -28,7 +28,7 @@ namespace Amazon.Lambda.S3Events
             }
             else
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException($"The {nameof(s3Coordinates)} of '{s3Coordinates}' is not supported.");
             }
             return transfer.DownloadAsync(fileInfo.FullName, bucket, key);
         }
