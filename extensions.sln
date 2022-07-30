@@ -67,8 +67,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleSystemsManagement", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CloudFormation", "CloudFormation", "{19AF0C3A-4744-400A-8EA0-B97248A14E01}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFormation.Test", "Amazon.CloudFormation.Test\CloudFormation.Test.csproj", "{9681CAED-0DD0-4519-A010-7B31BE4B3D98}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,10 +153,6 @@ Global
 		{BD4EAC11-9CA5-4976-A10A-F42FEE9F046B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD4EAC11-9CA5-4976-A10A-F42FEE9F046B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD4EAC11-9CA5-4976-A10A-F42FEE9F046B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9681CAED-0DD0-4519-A010-7B31BE4B3D98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9681CAED-0DD0-4519-A010-7B31BE4B3D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9681CAED-0DD0-4519-A010-7B31BE4B3D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9681CAED-0DD0-4519-A010-7B31BE4B3D98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,7 +186,6 @@ Global
 		{76981EF0-EB23-4B63-ACFA-390B4D2F629F} = {969A05E5-F5FA-4D1A-988C-0ED4B3594A13}
 		{BD4EAC11-9CA5-4976-A10A-F42FEE9F046B} = {AF7F6FB5-B814-421C-8D5E-C28506821F11}
 		{19AF0C3A-4744-400A-8EA0-B97248A14E01} = {1B54A874-82CD-4145-BC73-38CB9A2B16ED}
-		{9681CAED-0DD0-4519-A010-7B31BE4B3D98} = {19AF0C3A-4744-400A-8EA0-B97248A14E01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C9B63DA-A059-4EB7-A57C-8964D8A1011A}
