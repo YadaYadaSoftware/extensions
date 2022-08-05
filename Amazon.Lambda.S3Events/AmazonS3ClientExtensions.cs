@@ -149,6 +149,9 @@ public static class AmazonS3ClientExtensions
                 {
                     nextContinuationToken?.Dispose();
                 }
+
+                logger?.LogTrace("{0}={1},{2}={3}",nameof(listObjectsV2Response.IsTruncated), listObjectsV2Response.IsTruncated,nameof(listObjectsV2Response.NextContinuationToken), listObjectsV2Response.NextContinuationToken);
+                
             } while (listObjectsV2Response.IsTruncated);
         }
         catch (Exception e)
