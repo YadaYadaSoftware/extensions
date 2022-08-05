@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Amazon.CloudFormation.Model;
 using Amazon.Runtime.Internal.Util;
+using InvalidOperationException = Amazon.CloudFormation.Model.InvalidOperationException;
 
 namespace Amazon.CloudFormation
 {
@@ -46,6 +47,39 @@ namespace Amazon.CloudFormation
             return new Uri(templateUrl.ToString());
 
         }
+
+        // ReSharper disable once UnusedMember.Global
+        public static async Task<string> GetPropertyValue(this IAmazonCloudFormation amazonCloudFormation, string stackName, string resourceName, string propertyPath)
+        {
+            var templateBody = await amazonCloudFormation.GetTemplateAsync(stackName);
+            var templateNode = JsonNode.Parse(templateBody);
+            ArgumentNullException.ThrowIfNull(templateNode, nameof(templateNode));
+            var resources = templateNode["Resources"];
+            ArgumentNullException.ThrowIfNull(resources, nameof(resources));
+            var resource = resources[resourceName];
+            ArgumentNullException.ThrowIfNull(resource, nameof(resource));
+
+            var propertyPaths = propertyPath.Split('.', '/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var currentElement = resource["Properties"];
+
+            foreach (var path in propertyPaths)
+            {
+                ArgumentNullException.ThrowIfNull(currentElement, nameof(currentElement));
+                currentElement = currentElement[path];
+
+            }
+
+            ArgumentNullException.ThrowIfNull(currentElement, nameof(currentElement));
+            var value = currentElement.GetValue<string>();
+
+            if (string.IsNullOrEmpty(value)) throw new System.InvalidOperationException($"{nameof(value)} is null.");
+
+            return value;
+
+
+
+        }
+
 
 
     }
