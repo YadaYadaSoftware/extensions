@@ -49,6 +49,14 @@ namespace Amazon.CloudFormation
         }
 
         // ReSharper disable once UnusedMember.Global
+        public static async Task<bool> StackExists(this IAmazonCloudFormation amazonCloudFormation, string stackName)
+        {
+            var describeStacksAsync = await amazonCloudFormation.DescribeStacksAsync(new DescribeStacksRequest {StackName = stackName});
+            return describeStacksAsync.Stacks.Any();
+        }
+
+
+        // ReSharper disable once UnusedMember.Global
         public static async Task<string> GetPropertyValue(this IAmazonCloudFormation amazonCloudFormation, string stackName, string resourceName, string propertyPath)
         {
             var templateBody = await amazonCloudFormation.GetTemplateAsync(stackName);
