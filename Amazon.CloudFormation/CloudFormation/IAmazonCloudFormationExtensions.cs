@@ -51,8 +51,15 @@ namespace Amazon.CloudFormation
         // ReSharper disable once UnusedMember.Global
         public static async Task<bool> StackExists(this IAmazonCloudFormation amazonCloudFormation, string stackName)
         {
-            var describeStacksAsync = await amazonCloudFormation.DescribeStacksAsync(new DescribeStacksRequest {StackName = stackName});
-            return describeStacksAsync.Stacks.Any();
+            DescribeStacksResponse describeStacksAsync = null;
+            do
+            {
+                DescribeStacksRequest describeStacksRequest = new DescribeStacksRequest { NextToken = describeStacksAsync?.NextToken };
+                describeStacksAsync = await amazonCloudFormation.DescribeStacksAsync(describeStacksRequest);
+                if (describeStacksAsync.Stacks.SingleOrDefault(_ => _.StackName == stackName) is { }) return true;
+            } while (!string.IsNullOrEmpty(describeStacksAsync.NextToken));
+
+            return false;
         }
 
 
