@@ -16,6 +16,8 @@ public class ConfigurationQueueUriProvider<TTargetClass> : IQueueUriProvider<TTa
 
     public ConfigurationQueueUriProvider(IOptions<QueueConfiguration> options, ILoggerProvider loggerProvider)
     {
+        if (options == null) throw new ArgumentNullException(nameof(options));
+        if (!options.Value.Any()) throw new ArgumentNullException(nameof(options), "There are no queue configurations in the options.");
         _options = options.Value;
         this._logger = loggerProvider.CreateLogger(this.GetType().FullName!);
     }
