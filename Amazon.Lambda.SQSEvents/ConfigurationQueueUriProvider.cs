@@ -10,13 +10,13 @@ namespace Amazon.Lambda.SQSEvents;
 
 public class ConfigurationQueueUriProvider<TTargetClass> : IQueueUriProvider<TTargetClass> where TTargetClass : class
 {
-    private readonly IOptions<QueueConfiguration> _options;
+    private readonly QueueConfiguration _options;
     private readonly ILogger _logger;
 
 
     public ConfigurationQueueUriProvider(IOptions<QueueConfiguration> options, ILoggerProvider loggerProvider)
     {
-        _options = options;
+        _options = options.Value;
         this._logger = loggerProvider.CreateLogger(this.GetType().FullName!);
     }
     public async Task<Uri> GetQueueUriAsync(Expression<Action<TTargetClass>> expression)
@@ -30,8 +30,8 @@ public class ConfigurationQueueUriProvider<TTargetClass> : IQueueUriProvider<TTa
                 if (expression?.Body is MethodCallExpression member)
                 {
                     this._logger.LogTrace(expression?.Body?.ToString());
-                    //return From(template, typeof(TFunction), member.Method.Name, code, role, logicalId);
                     var methodInfo = typeof(TTargetClass).GetMethod(member.Method.Name);
+                    ArgumentNullException.ThrowIfNull(methodInfo,nameof(methodInfo));
                     return await this.GetQueueUriAsync(methodInfo);
                 }
 
@@ -48,7 +48,7 @@ public class ConfigurationQueueUriProvider<TTargetClass> : IQueueUriProvider<TTa
     public async Task<Uri> GetQueueUriAsync([NotNull] MethodInfo methodInfo)
     {
         using (this._logger.AddMember(nameof(GetQueueUriAsync)))
-        using (this._logger.AddScope(nameof(TTargetClass), typeof(TTargetClass).FullName))
+        using (this._logger.AddScope(nameof(TTargetClass), typeof(TTargetClass).FullName!))
         using (this._logger.AddScope(nameof(methodInfo), methodInfo.Name))
         {
             try
@@ -58,7 +58,17 @@ public class ConfigurationQueueUriProvider<TTargetClass> : IQueueUriProvider<TTa
                 var queueKey = $"{typeof(TTargetClass).FullName}.{methodInfo.Name}";
                 using (_logger.AddScope(nameof(queueKey), queueKey))
                 {
-                    return new Uri(_options.Value[queueKey]);
+                    try
+                    {
+                        return new Uri(_options[queueKey]);
+
+                    }
+                    catch (Exception e)
+                    {
+
+                        this._logger.LogError(e, $"{System.Text.Json.JsonSerializer.Serialize(_options)}{Environment.NewLine}{e.Message}");
+                        throw;
+                    }
                 }
             }
             catch (Exception e)
