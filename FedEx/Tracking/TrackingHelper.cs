@@ -19,7 +19,7 @@ public class TrackingHelper
     }
 
     // ReSharper disable once UnusedMember.Global
-    public async Task<TrackingStatus> GetStatus(string trackingNumber)
+    public async Task<TrackingStatus> GetStatusAsync(string trackingNumber)
     {
         using (_logger.AddMember())
         using(var httpClient = new HttpClient{BaseAddress = new Uri("https://apis.fedex.com") })
