@@ -14,8 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddFedExTrackingHelper(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            if (configuration.GetSection("FedEx") == null) throw new InvalidOperationException("FedEx configuration missing.");
-            serviceCollection.AddOptions<FedExOptions>("FedEx");
+            var configurationSection = configuration.GetSection("FedEx");
+            if (configurationSection == null) throw new InvalidOperationException("FedEx configuration missing.");
+            serviceCollection.Configure<FedExOptions>(configurationSection);
             serviceCollection.TryAddSingleton<TrackingHelper>();
             return serviceCollection;
 

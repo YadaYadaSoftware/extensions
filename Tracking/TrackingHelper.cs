@@ -13,6 +13,8 @@ public class TrackingHelper
         _options = options.Value;
         _logger = loggerProvider.CreateLogger(typeof(TrackingHelper).FullName!);
     }
+
+    // ReSharper disable once UnusedMember.Global
     public TrackingStatus GetStatus(string trackingNumber)
     {
         using (_logger.AddMember())
