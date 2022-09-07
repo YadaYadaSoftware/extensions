@@ -20,15 +20,18 @@ public class TrackingHelper
     public async Task<TrackingStatus> GetStatusAsync(string trackingNumber)
     {
         using (_logger.AddMember())
+        using (_logger.AddScope(nameof(trackingNumber),trackingNumber))
+        {
+            
+        }
         using(var httpClient = new HttpClient{BaseAddress = new Uri("https://apis.fedex.com") })
         {
-            _logger.LogTrace("{0}={1},{2}={3}", nameof(_token.GetValueAsync), await _token.GetValueAsync(), nameof(trackingNumber), trackingNumber);
-
             var client = new FedEx.Tracking.Client(httpClient);
             client.JsonSerializerSettings.Converters.Add(new LocationDetail1Converter());
 
             var fullSchemaTrackingNumbers = new Full_Schema_Tracking_Numbers();
             fullSchemaTrackingNumbers.TrackingInfo.Add(new MasterTrackingInfo() { TrackingNumberInfo = new TrackingNumberInfo { TrackingNumber = trackingNumber } });
+            fullSchemaTrackingNumbers.IncludeDetailedScans = true;
 
             TrkcResponseVO_TrackingNumber? trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {await _token.GetValueAsync()}");
             foreach (var outputCompleteTrackResult in trackingnumbersAsync.Output.CompleteTrackResults)
