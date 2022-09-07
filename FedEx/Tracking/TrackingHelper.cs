@@ -21,9 +21,6 @@ public class TrackingHelper
     {
         using (_logger.AddMember())
         using (_logger.AddScope(nameof(trackingNumber),trackingNumber))
-        {
-            
-        }
         using(var httpClient = new HttpClient{BaseAddress = new Uri("https://apis.fedex.com") })
         {
             var client = new FedEx.Tracking.Client(httpClient);
@@ -36,10 +33,12 @@ public class TrackingHelper
             TrkcResponseVO_TrackingNumber? trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {await _token.GetValueAsync()}");
             foreach (var outputCompleteTrackResult in trackingnumbersAsync.Output.CompleteTrackResults)
             {
+                _logger.LogTrace("{0}:{1}={2}", trackingNumber, nameof(outputCompleteTrackResult.TrackResults), outputCompleteTrackResult.TrackResults.Count);
+
                 foreach (var trackResult in outputCompleteTrackResult.TrackResults)
                 {
                     
-                    _logger.LogTrace($"{trackResult.TrackingNumberInfo.TrackingNumber}:{System.Text.Json.JsonSerializer.Serialize(trackResult)}");
+                    _logger.LogTrace(System.Text.Json.JsonSerializer.Serialize(trackResult));
                 }
             }
             return TrackingStatus.LabelCreated;
