@@ -9,12 +9,12 @@ namespace FedEx.Tracking;
 
 public class TrackingHelper
 {
-    private readonly FedExOptions _options;
+    private readonly Token _token;
     private readonly ILogger _logger;
 
-    public TrackingHelper(IOptions<FedExOptions> options, ILoggerProvider loggerProvider)
+    public TrackingHelper(ILoggerProvider loggerProvider, Token token)
     {
-        _options = options.Value;
+        _token = token;
         _logger = loggerProvider.CreateLogger(typeof(TrackingHelper).FullName!);
     }
 
@@ -24,19 +24,8 @@ public class TrackingHelper
         using (_logger.AddMember())
         using(var httpClient = new HttpClient{BaseAddress = new Uri("https://apis.fedex.com") })
         {
-            _logger.LogTrace("{0}={1},{2}={3},{4}={5}", nameof(_options.AccountId), _options.AccountId, nameof(_options.SecretKey), _options.SecretKey, nameof(trackingNumber), trackingNumber);
+            _logger.LogTrace("{0}={1},{2}={3}", nameof(_token.GetValueAsync), await _token.GetValueAsync(), nameof(trackingNumber), trackingNumber);
 
-            var authClient = new FedEx.Authorization.Client(httpClient)
-            {
-                BaseUrl = "https://apis.fedex.com"
-            };
-            var fullSchema = new FullSchema
-            {
-                Grant_type = "client_credentials",
-                Client_id = _options.AccountId,
-                Client_secret = _options.SecretKey
-            };
-            var oauthTokenAsync = await authClient.OauthTokenAsync("application/json", fullSchema);
             var client = new FedEx.Tracking.Client(httpClient)
             {
                 JsonSerializerSettings =
@@ -48,7 +37,7 @@ public class TrackingHelper
             var fullSchemaTrackingNumbers = new Full_Schema_Tracking_Numbers();
             fullSchemaTrackingNumbers.TrackingInfo.Add(new MasterTrackingInfo() { TrackingNumberInfo = new TrackingNumberInfo { TrackingNumber = trackingNumber } });
 
-            var trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {oauthTokenAsync.Access_token}");
+            var trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {await _token.GetValueAsync()}");
             foreach (var outputCompleteTrackResult in trackingnumbersAsync.Output.CompleteTrackResults)
             {
                 foreach (var trackResult in outputCompleteTrackResult.TrackResults)

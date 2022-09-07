@@ -1,4 +1,4 @@
-﻿namespace FedEx.Tracking;
+﻿namespace FedEx.Authorization;
 
 public class FedExOptions
 {

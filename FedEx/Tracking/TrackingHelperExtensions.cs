@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FedEx.Authorization;
 using FedEx.Tracking;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -17,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var configurationSection = configuration.GetSection("FedEx");
             if (configurationSection == null) throw new InvalidOperationException("FedEx configuration missing.");
             serviceCollection.Configure<FedExOptions>(configurationSection);
+            serviceCollection.AddSingleton<Token>();
             serviceCollection.TryAddSingleton<TrackingHelper>();
             return serviceCollection;
 
