@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FedEx.Tracking;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
@@ -15,7 +16,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (configuration.GetSection("FedEx") == null) throw new InvalidOperationException("FedEx configuration missing.");
             serviceCollection.AddOptions<FedExOptions>("FedEx");
-            return serviceCollection.AddSingleton<TrackingHelper>();
+            serviceCollection.TryAddSingleton<TrackingHelper>();
+            return serviceCollection;
+
         }
     }
 }

@@ -17,7 +17,7 @@ public class TrackingHelper
     {
         using (_logger.AddMember())
         {
-            _logger.LogTrace("{0}={1},{2}={3}", nameof(_options.AccountId), _options.AccountId, nameof(_options.SecretKey),_options.SecretKey);
+            _logger.LogTrace("{0}={1},{2}={3},{4}={5}", nameof(_options.AccountId), _options.AccountId, nameof(_options.SecretKey),_options.SecretKey, nameof(trackingNumber), trackingNumber);
             return TrackingStatus.LabelCreated;
 
         }
