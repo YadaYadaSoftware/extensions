@@ -53,7 +53,8 @@ public class TrackingHelper
             {
                 foreach (var trackResult in outputCompleteTrackResult.TrackResults)
                 {
-                    _logger.LogTrace($"{trackResult.TrackingNumberInfo.TrackingNumber}:{trackResult.LatestStatusDetail?.Description}");
+                    
+                    _logger.LogTrace($"{trackResult.TrackingNumberInfo.TrackingNumber}:{System.Text.Json.JsonSerializer.Serialize(trackResult)}");
                 }
             }
             return TrackingStatus.LabelCreated;
