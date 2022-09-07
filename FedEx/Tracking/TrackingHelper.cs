@@ -1,9 +1,7 @@
-﻿using System.Reflection;
-using FedEx.Authorization;
+﻿using FedEx.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace FedEx.Tracking;
 
@@ -26,13 +24,7 @@ public class TrackingHelper
         {
             _logger.LogTrace("{0}={1},{2}={3}", nameof(_token.GetValueAsync), await _token.GetValueAsync(), nameof(trackingNumber), trackingNumber);
 
-            var client = new FedEx.Tracking.Client(httpClient)
-            {
-                JsonSerializerSettings =
-                {
-                    ContractResolver = new SafeContractResolver()
-                }
-            };
+            var client = new FedEx.Tracking.Client(httpClient);
 
             var fullSchemaTrackingNumbers = new Full_Schema_Tracking_Numbers();
             fullSchemaTrackingNumbers.TrackingInfo.Add(new MasterTrackingInfo() { TrackingNumberInfo = new TrackingNumberInfo { TrackingNumber = trackingNumber } });
@@ -49,14 +41,5 @@ public class TrackingHelper
             return TrackingStatus.LabelCreated;
 
         }
-    }
-}
-public class SafeContractResolver : DefaultContractResolver
-{
-    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-    {
-        var jsonProp = base.CreateProperty(member, memberSerialization);
-        jsonProp.Required = Required.Default;
-        return jsonProp;
     }
 }

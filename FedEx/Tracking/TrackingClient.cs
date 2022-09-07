@@ -21,24 +21,24 @@ namespace FedEx.Tracking
     public partial class Client 
     {
         private System.Net.Http.HttpClient _httpClient;
-        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
+        private System.Lazy<System.Text.Json.JsonSerializerOptions> _settings;
 
         public Client(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
+            _settings = new System.Lazy<System.Text.Json.JsonSerializerOptions>(CreateSerializerSettings);
         }
 
-        private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
+        private System.Text.Json.JsonSerializerOptions CreateSerializerSettings()
         {
-            var settings = new Newtonsoft.Json.JsonSerializerSettings();
+            var settings = new System.Text.Json.JsonSerializerOptions();
             UpdateJsonSerializerSettings(settings);
             return settings;
         }
 
-        public Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
+        public System.Text.Json.JsonSerializerOptions JsonSerializerSettings { get { return _settings.Value; } }
 
-        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
+        partial void UpdateJsonSerializerSettings(System.Text.Json.JsonSerializerOptions settings);
 
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
@@ -93,7 +93,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -258,7 +258,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -423,7 +423,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -588,7 +588,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -753,7 +753,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -918,7 +918,7 @@ namespace FedEx.Tracking
                     if (authorization == null)
                         throw new System.ArgumentNullException("authorization");
                     request_.Headers.TryAddWithoutValidation("authorization", ConvertToString(authorization, System.Globalization.CultureInfo.InvariantCulture));
-                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1061,10 +1061,10 @@ namespace FedEx.Tracking
                 var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
+                    var typedBody = System.Text.Json.JsonSerializer.Deserialize<T>(responseText, JsonSerializerSettings);
                     return new ObjectResponseResult<T>(typedBody, responseText);
                 }
-                catch (Newtonsoft.Json.JsonException exception)
+                catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
                     throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
@@ -1075,15 +1075,12 @@ namespace FedEx.Tracking
                 try
                 {
                     using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new System.IO.StreamReader(responseStream))
-                    using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
                     {
-                        var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
-                        var typedBody = serializer.Deserialize<T>(jsonTextReader);
+                        var typedBody = await System.Text.Json.JsonSerializer.DeserializeAsync<T>(responseStream, JsonSerializerSettings, cancellationToken).ConfigureAwait(false);
                         return new ObjectResponseResult<T>(typedBody, string.Empty);
                     }
                 }
-                catch (Newtonsoft.Json.JsonException exception)
+                catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
                     throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
@@ -1146,27 +1143,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates if detailed scans are requested or not. &lt;br&gt;Valid values are True, or False.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("includeDetailedScans", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("includeDetailedScans")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? IncludeDetailedScans { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("masterTrackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("masterTrackingNumberInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public MasterTrackingInfo MasterTrackingNumberInfo { get; set; } = new MasterTrackingInfo();
 
         /// <summary>
         /// The associated shipment type, such as MPS, Group MPS, or an outbound shipment which is linked to a return shipment. Example: STANDARD_MPS
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("associatedType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("associatedType")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public Full_Schema_Multiple_Piece_ShipmentAssociatedType AssociatedType { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("pagingDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("pagingDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public PagingDetails PagingDetails { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1184,22 +1187,28 @@ namespace FedEx.Tracking
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD&lt;br&gt; Example: 2020-03-29
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateBegin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateBegin")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateBegin { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD&lt;br&gt; Example: 2020-04-01
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateEnd", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateEnd")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateEnd { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("trackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackingNumberInfo TrackingNumberInfo { get; set; } = new TrackingNumberInfo();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1217,26 +1226,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// This is a Tracking number for FedEx packages used for tracking a single package or group of packages. &lt;br&gt; Example: 128667043726&lt;br&gt;&lt;a onclick='loadDocReference("mocktrackingnumbersforfedexexpressandfedexground")'&gt;Click here to see Mock Tracking Numbers.&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumber")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string TrackingNumber { get; set; }
 
         /// <summary>
         /// This is a placeholder to provide the FedEx operating company (transportation) code used for package delivery. &lt;br&gt; Example: FDXE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("carrierCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("carrierCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public TrackingNumberInfoCarrierCode? CarrierCode { get; set; }
 
         /// <summary>
         /// Unique identifier used to distinguish duplicate FedEx tracking numbers. This value will be set by FedEx systems. &lt;br&gt; Example: 245822\~123456789012\~FDEG
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumberUniqueId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberUniqueId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TrackingNumberUniqueId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1254,18 +1270,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// &lt;p&gt;Use this element to specify the number of Tracking results to be returned in the Tracking response. Use this and pagingToken elements, to retrieve remaining set of the track results.&lt;/p&gt;&lt;p&gt;&lt;u&gt;Here is how the paging works:&lt;/u&gt;&lt;br&gt;For your first track request, send element &lt;i&gt;resultsPerPage&lt;/i&gt;, with a number XX (5) and the response will return XX (5) results along with element &lt;i&gt;pagingToken&lt;/i&gt; and &lt;i&gt;moreDataAvailable&lt;/i&gt; = true or false based on the number of tracking results.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If &lt;i&gt;moreDataAvailable&lt;/i&gt; = false, then there are no more track results can be retrieved further.&lt;/li&gt;&lt;li&gt;If &lt;i&gt;moreDataAvailable&lt;/i&gt; = True, then it means there are more track results and hence send the next tracking request with &lt;i&gt;resultsPerPage&lt;/i&gt; = YY (4) and &lt;i&gt;pagingToken&lt;/i&gt; = XX + 1 (5)  from Track Response element &lt;i&gt;pagingToken&lt;/i&gt;. This can be continued until the &lt;i&gt;moreDataAvailable&lt;/i&gt; becomes false or there are no more tracking results.&lt;/li&gt;&lt;/ul&gt; &lt;br&gt; Example: 10
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("resultsPerPage", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("resultsPerPage")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public int? ResultsPerPage { get; set; }
 
         /// <summary>
         /// &lt;p&gt;Use this element to specify the starting sequence for the next set of tracking results. This element can be specified if paging is used in the initial tracking request and you need to request next set of track results.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Note:  This element not to be used in the initial tracking request and only should be used in the subsequent track requests when there is paging (element &lt;/i&gt;resultsPerPage &lt;i&gt;is specified) indicated.&lt;/i&gt;&lt;/p&gt; &lt;br&gt; Example: 1234567890
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("pagingToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("pagingToken")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PagingToken { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1283,21 +1305,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_Associated Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1315,18 +1345,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Contains the detailed tracking entry information.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("completeTrackResults", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("completeTrackResults")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CompleteTrackResult> CompleteTrackResults { get; set; }
 
         /// <summary>
         /// The cxs alert type, alert code, and alert messages.&lt;br&gt;Example: example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1344,18 +1380,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// A tracking number to identify a package.&lt;br&gt; Example: 123456789012
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TrackingNumber { get; set; }
 
         /// <summary>
         /// An array of detailed tracking information for the requested packages(s). In case of duplicate shipments, multiple track details will be populated.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackResults", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackResults")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<TrackResult> TrackResults { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1370,156 +1412,237 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class TrackResult
     {
-        [Newtonsoft.Json.JsonProperty("trackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberInfo")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TrackingNumberInfo TrackingNumberInfo { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("additionalTrackingInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("additionalTrackingInfo")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public AdditionalTrackingInfo AdditionalTrackingInfo { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("distanceToDestination", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("distanceToDestination")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public Distance DistanceToDestination { get; set; }
 
         /// <summary>
         /// Indicates the consolidation details.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("consolidationDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("consolidationDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<ConsolidationDetail> ConsolidationDetail { get; set; }
 
         /// <summary>
         /// The associated meter number for your FedEx account number. Maximum of 9 characters. &lt;br&gt; Example: 8468376
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("meterNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("meterNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string MeterNumber { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("returnDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("returnDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ReturnDetail ReturnDetail { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("serviceDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("serviceDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ServiceDescriptionDetail ServiceDetail { get; set; }
 
         /// <summary>
         /// Location details for the FedEx facility where the package will be or has been delivered.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationLocation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationLocation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public LocationDetail_1 DestinationLocation { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("latestStatusDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("latestStatusDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public StatusDetail LatestStatusDetail { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("serviceCommitMessage", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("serviceCommitMessage")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ServiceCommitMessage ServiceCommitMessage { get; set; }
 
         /// <summary>
         /// Notifications to the end user that provide additional information relevant to the tracked shipment. For example, a notification may indicate that a change in behavior has occurred.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("informationNotes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("informationNotes")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<InformationNoteDetail> InformationNotes { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("error", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("error")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public CXSError Error { get; set; }
 
         /// <summary>
         /// Indicate the special handlings on the package being tracked. Includes Special handlings requested for the package like signature options, Broker select or COD etc.&lt;br&gt;&lt;a onclick='loadDocReference("fedexexpressspecialhandlingcodes")'&gt;Click here to see FedEx Express Special Handling Codes.&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("specialHandlings", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("specialHandlings")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<TrackSpecialHandling> SpecialHandlings { get; set; }
 
         /// <summary>
         /// The available tracking documents for the shipment being tracked. Available tracking documents includes SPOD and Bill of lading.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("availableImages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("availableImages")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<AvailableImagesDetail> AvailableImages { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("deliveryDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("deliveryDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public DeliveryDetails DeliveryDetails { get; set; }
 
         /// <summary>
         /// FedEx scan event information for a shipment. Includes the list of events and/or scans applied.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("scanEvents", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("scanEvents")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<ScanEvent> ScanEvents { get; set; }
 
         /// <summary>
         /// Date and time information for the tracked shipment. Date and time information for the tracked shipment includes various type of date time including when the package was shipped, when it is expected to deliver, when it is actually delivered etc.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("dateAndTimes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("dateAndTimes")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<TrackingDateAndTime> DateAndTimes { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("packageDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("packageDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public PackageDetail PackageDetails { get; set; }
 
         /// <summary>
         /// Classification codes for the goods in package. Goods classification codes required for clearance purpose. &lt;br&gt; Example: goodsClassificationCode
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("goodsClassificationCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("goodsClassificationCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string GoodsClassificationCode { get; set; }
 
         /// <summary>
         /// Location details for the Fedex facility holding package for delivery.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("holdAtLocation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("holdAtLocation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public LocationDetail HoldAtLocation { get; set; }
 
         /// <summary>
         /// List of delivery options that can be used to customize the delivery of the package.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customDeliveryOptions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customDeliveryOptions")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CustomDeliveryOption> CustomDeliveryOptions { get; set; }
 
         /// <summary>
         /// The estimated window for time of delivery.  May be periodically updated based on available in-flight shipment information.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("estimatedDeliveryTimeWindow", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("estimatedDeliveryTimeWindow")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TimeWindow EstimatedDeliveryTimeWindow { get; set; }
 
         /// <summary>
         /// Piece count information at origin and destination.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("pieceCounts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("pieceCounts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<PieceCountDetail> PieceCounts { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("originLocation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("originLocation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public LocationDetail_1 OriginLocation { get; set; }
 
         /// <summary>
         /// Contact and address information of recipient.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("recipientInformation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("recipientInformation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ContactAndAddress RecipientInformation { get; set; }
 
         /// <summary>
         /// The standard committed window of time by which the package is expected to be delivered.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("standardTransitTimeWindow", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("standardTransitTimeWindow")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TimeWindow StandardTransitTimeWindow { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("shipmentDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("shipmentDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TrackShipmentDetail ShipmentDetails { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("reasonDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("reasonDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ReasonDetail ReasonDetail { get; set; }
 
         /// <summary>
         /// The types of email notifications that are available for the package. &lt;br&gt; Example:ON_DELIVERY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("availableNotifications", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("availableNotifications")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<string> AvailableNotifications { get; set; }
 
         /// <summary>
         /// Contact and address information of shipper.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipperInformation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipperInformation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ContactAndAddress ShipperInformation { get; set; }
 
         /// <summary>
         /// Last updated delivery address for the package.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("lastUpdatedDestinationAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("lastUpdatedDestinationAddress")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public AddressVO LastUpdatedDestinationAddress { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1537,30 +1660,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which indicates if the current shipment has associated shipments.&lt;br&gt; Example: false
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("hasAssociatedShipments", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("hasAssociatedShipments")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? HasAssociatedShipments { get; set; }
 
         /// <summary>
         /// Field which holds information about nickname of the shipment. &lt;br&gt; Example: Shipment nickname
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("nickname", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("nickname")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Nickname { get; set; }
 
         /// <summary>
         /// Other related identifiers for this package such as reference numbers, purchase order number etc. Provides identifiers other than tracking number that can be used in order to track the shipment.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("packageIdentifiers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageIdentifiers")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<PackageIdentifier> PackageIdentifiers { get; set; }
 
         /// <summary>
         /// Field which holds customer assigned notes for a package.&lt;br&gt; Example: shipment notes
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipmentNotes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipmentNotes")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipmentNotes { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1578,25 +1713,34 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the package identifier to identify the package.&lt;br&gt; Example: SHIPPER_REFERENCE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public PackageIdentifierType? Type { get; set; }
 
         /// <summary>
         /// Field which holds the value of the identifier used to identify the package. &lt;br&gt;Example: 'ASJFGVAS'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<string> Value { get; set; }
 
         /// <summary>
         /// Unique identifier used to distinguish duplicate FedEx tracking numbers. This value will be set by FedEx systems. &lt;br&gt; Example: 245822\~123456789012\~FDEG
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumberUniqueId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberUniqueId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TrackingNumberUniqueId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1614,19 +1758,25 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the distance unit type.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("units", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("units")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DistanceUnits? Units { get; set; }
 
         /// <summary>
         /// Field which holds the value for the distance.&lt;br&gt; Example: 685.78
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public double? Value { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1644,36 +1794,51 @@ namespace FedEx.Tracking
         /// <summary>
         /// The timestamp for the consolidation. &lt;br&gt; Example: 2020-10-13T03:54:44-06:00
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("timeStamp", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("timeStamp")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TimeStamp { get; set; }
 
         /// <summary>
         /// The identifier for the consolidation. &lt;br&gt; Example: 47936927
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("consolidationID", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("consolidationID")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ConsolidationID { get; set; }
 
         /// <summary>
         /// Specifies the reason details for the consolidation event for a package.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("reasonDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("reasonDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public ReasonDetail ReasonDetail { get; set; }
 
         /// <summary>
         /// Specifies the package count for the consolidation. &lt;br&gt; Example: 25
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("packageCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageCount")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public int? PackageCount { get; set; }
 
         /// <summary>
         /// Specifies the consolidation event type for a package.  A package can be ADDED to, REMOVED from, or EXCLUDED from a consolidation. &lt;br&gt; Example: PACKAGE_ADDED_TO_CONSOLIDATION
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("eventType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("eventType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string EventType { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1691,18 +1856,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the reason description. &lt;br&gt; Example: Wrong color
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Field which holds the reason type.&lt;br&gt; Example: REJECTED
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1720,18 +1891,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Name of person authorizing the return, entered by the customer.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("authorizationName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("authorizationName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string AuthorizationName { get; set; }
 
         /// <summary>
         /// Specifies the return reason details.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("reasonDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("reasonDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<ReasonDetail> ReasonDetail { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1749,24 +1926,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the text description of the service type of this package.&lt;br&gt; Example: FedEx Freight Economy
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Field which holds the abbreviated text description of the service type of this package.&lt;br&gt; Example: FL
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shortDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shortDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShortDescription { get; set; }
 
         /// <summary>
         /// This is the service type.&lt;br&gt; Example: FEDEX_FREIGHT_ECONOMY&lt;br&gt;&lt;a onclick='loadDocReference("servicetypes")'&gt;Click here to see Service Types&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1784,24 +1970,28 @@ namespace FedEx.Tracking
         /// <summary>
         /// Location Identification for facilities identified by an alpha numeric location code. Passing Location Id of the Hold at Location (HAL) address is strongly recommended to ensure packages are delivered to the correct address.&lt;br&gt; Example: SEA
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string LocationId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("locationContactAndAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("locationContactAndAddress")]
         [System.ComponentModel.DataAnnotations.Required]
         public ContactAndAddress_1 LocationContactAndAddress { get; set; } = new ContactAndAddress_1();
 
         /// <summary>
         /// The FedEx Location Type.&lt;br&gt; Example: PICKUP_LOCTION
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationType")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public LocationDetail_1LocationType LocationType { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1816,7 +2006,8 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ContactAndAddress_1
     {
-        [Newtonsoft.Json.JsonProperty("contact", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("contact")]
         [System.ComponentModel.DataAnnotations.Required]
         public ContactVO_1 Contact { get; set; } = new ContactVO_1();
 
@@ -1827,13 +2018,14 @@ namespace FedEx.Tracking
         /// <br/>
         /// <br/>Conditional when used with Payor object.  Required if entering using RECIPIENT or THIRD_PARTY.  Required if not-authenticated and SENDER is selected
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("address", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("address")]
         [System.ComponentModel.DataAnnotations.Required]
         public AddressVO_1 Address { get; set; } = new AddressVO_1();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1851,24 +2043,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Identifies the contact person's name. Max Length is 70.&lt;br&gt; Example: John Taylor
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("personName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("personName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PersonName { get; set; }
 
         /// <summary>
         /// Identifies the phone number associated with this contact. Max length is 15. &lt;br&gt;Example: '1234567890'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("phoneNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Identifies the company this contact is associated with. Max length is 35. &lt;br&gt; Example: Fedex
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("companyName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("companyName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CompanyName { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1886,56 +2087,76 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies the FedEx classification type for an address. &lt;br&gt;Valid values are BUSINESS, RESIDENTIAL, MIXED, UNKNOWN.&lt;br&gt; Example: BUSINESS
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("classification", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("classification")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Classification { get; set; }
 
         /// <summary>
         /// Placeholder to indicate whether the address is residential (as opposed to commercial).
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("residential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("residential")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? Residential { get; set; }
 
         /// <summary>
         /// Combination of number, street name, etc. At least one line is required for a valid physical address; empty lines should not be included.&lt;br&gt; Example: ["1043 North Easy Street", "Suite 999"]. &lt;br&gt;Note: Street lines is shown in response only in secured flow. For non secured flow, street lines is not shown in the response.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("streetLines", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("streetLines")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> StreetLines { get; set; } = new System.Collections.ObjectModel.Collection<string>();
 
         /// <summary>
         /// Conditional&lt;br&gt;The name of the city, town, etc. &lt;br&gt; Example: SEATTLE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("city", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("city")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string City { get; set; }
 
         /// <summary>
         /// Relevant only to addresses in Puerto Rico, where multiple addresses within the same postal code can have the same house number and street name. When this is the case, the urbanization code is needed to distinguish them.&lt;br&gt; Example: RAFAEL
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("urbanizationCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("urbanizationCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string UrbanizationCode { get; set; }
 
         /// <summary>
         /// This is a placeholder for State or Province code. &lt;br&gt; Example: CA&lt;br&gt;&lt;a onclick='loadDocReference("canadaprovincecodes")'&gt;Click here to see State/Province Code&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("stateOrProvinceCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("stateOrProvinceCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string StateOrProvinceCode { get; set; }
 
         /// <summary>
         /// Placeholder to specify postal code for the address. Postal Code is required for postal-aware countries.&lt;br&gt; Example: 98101&lt;br&gt;&lt;a onclick='loadDocReference("postalawarecountries")'&gt;Click here to see Postal aware countries&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("postalCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("postalCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PostalCode { get; set; }
 
         /// <summary>
         /// Placeholder for country code (2 characters) for the address.&lt;br&gt;Example: US&lt;br&gt;&lt;a onclick='loadDocReference("countrycodes")'&gt;Click here to see Country Codes&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("countryCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("countryCode")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string CountryCode { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -1953,45 +2174,65 @@ namespace FedEx.Tracking
         /// <summary>
         /// Address information related to the associated Status.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("scanLocation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("scanLocation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public AddressVO ScanLocation { get; set; }
 
         /// <summary>
         /// A code that identifies this type of status.&lt;br&gt; Example:PU,DE,DP,HL,OC
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// Specifies the latest status detail code of the package.&lt;br&gt; Example:PU,DE,DP,HL,OC
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("derivedCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("derivedCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DerivedCode { get; set; }
 
         /// <summary>
         /// Specifies the cause of exception along with any action that needs to taken by customer.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("ancillaryDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("ancillaryDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<StatusAncillaryDetail> AncillaryDetails { get; set; }
 
         /// <summary>
         /// This is the latest tracking status by locale.&lt;br&gt; Example: Picked up
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("statusByLocale", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("statusByLocale")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string StatusByLocale { get; set; }
 
         /// <summary>
         /// A human-readable description of this status.&lt;br&gt; Example: Picked up
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("delayDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("delayDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public DelayDetail DelayDetail { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2009,62 +2250,85 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies the FedEx classification type for an address. &lt;br&gt;Valid values are BUSINESS, RESIDENTIAL, MIXED, UNKNOWN.&lt;br&gt; Example: BUSINESS
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("classification", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("classification")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Classification { get; set; }
 
         /// <summary>
         /// Placeholder to indicate whether the address is residential (as opposed to commercial).
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("residential", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("residential")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? Residential { get; set; }
 
         /// <summary>
         /// Combination of number, street name, etc. At least one line is required for a valid physical address; empty lines should not be included.&lt;br&gt; Example: ["1043 North Easy Street", "Suite 999"]
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("streetLines", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("streetLines")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> StreetLines { get; set; } = new System.Collections.ObjectModel.Collection<string>();
 
         /// <summary>
         /// Conditional&lt;br&gt;The name of the city, town, etc. &lt;br&gt; Example: SEATTLE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("city", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("city")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string City { get; set; }
 
         /// <summary>
         /// Relevant only to addresses in Puerto Rico, where multiple addresses within the same postal code can have the same house number and street name. When this is the case, the urbanization code is needed to distinguish them.&lt;br&gt; Example: RAFAEL
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("urbanizationCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("urbanizationCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string UrbanizationCode { get; set; }
 
         /// <summary>
         /// This is a placeholder for State or Province code. &lt;br&gt; Example: CA&lt;br&gt;&lt;a onclick='loadDocReference("canadaprovincecodes")'&gt;Click here to see State/Province Code&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("stateOrProvinceCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("stateOrProvinceCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string StateOrProvinceCode { get; set; }
 
         /// <summary>
         /// Placeholder to specify postal code for the address. Postal Code is required for postal-aware countries.&lt;br&gt; Example: 98101&lt;br&gt;&lt;a onclick='loadDocReference("postalawarecountries")'&gt;Click here to see Postal aware countries&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("postalCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("postalCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PostalCode { get; set; }
 
         /// <summary>
         /// Placeholder for country code (2 characters) for the address.&lt;br&gt;Example: US&lt;br&gt;&lt;a onclick='loadDocReference("countrycodes")'&gt;Click here to see Country Codes&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("countryCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("countryCode")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string CountryCode { get; set; }
 
         /// <summary>
         /// Field holds the fully spelled out name of a country.&lt;br&gt; Example: United States
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("countryName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("countryName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CountryName { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2082,30 +2346,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds Reason code associated to the status of the shipment being tracked.&lt;br&gt; Example: 15,84,IN001,015A,02
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("reason", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("reason")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Reason { get; set; }
 
         /// <summary>
         /// Field which holds Reason description associated to the status of the shipment being tracked.&lt;br&gt; Example: Customer not available or business closed,Local delivery restriction, delivery not attempted,Package delivered to recipient address - release authorized
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("reasonDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("reasonDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ReasonDescription { get; set; }
 
         /// <summary>
         /// Field which holds recommended action for customer to resolve reason.&lt;br&gt; Example: Contact us at &lt;http://www.fedex.com/us/customersupport/call/index.html&gt; to discuss possible delivery or pickup alternatives.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("action", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("action")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Action { get; set; }
 
         /// <summary>
         /// Field which holds recommended action description for customer to resolve reason.&lt;br&gt; Example: Customer not Available or Business Closed
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("actionDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("actionDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ActionDescription { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2123,27 +2399,36 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies the type of delay.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DelayDetailType? Type { get; set; }
 
         /// <summary>
         /// Specifies the subType of delay.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("subType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("subType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DelayDetailSubType? SubType { get; set; }
 
         /// <summary>
         /// Specifies the status of package indicating whether a package is arriving early or is on time or has been delayed.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DelayDetailStatus? Status { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2161,19 +2446,25 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the commitment message for this package.&lt;br&gt; Example: No scheduled delivery date available at this time.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Message { get; set; }
 
         /// <summary>
         /// Field which holds the type of service commit message.&lt;br&gt; Example: ESTIMATED_DELIVERY_DATE_UNAVAILABLE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public ServiceCommitMessageType? Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2191,18 +2482,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the code that designates the type of informational message being returned. &lt;br&gt;Example: 'CLEARANCE_ENTRY_FEE_APPLIES'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// Field which holds the The informational message in human readable form.&lt;br&gt; Example: this is an informational message
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2220,24 +2517,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Error Code. &lt;br&gt; Example: TRACKING.TRACKINGNUMBER.EMPTY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Error Message. &lt;br&gt;Example: Please provide tracking number.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2255,18 +2561,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Identifies the error option to be applied. &lt;br&gt;Example: value
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Value { get; set; }
 
         /// <summary>
         /// Indicates the value associated with the key.&lt;br&gt; Example: key
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("key", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("key")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Key { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2284,24 +2596,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the text description of the special handling code.&lt;br&gt; Example: Deliver Weekday
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Field which holds type representing the special handling.&lt;br&gt; Example: DELIVER_WEEKDAY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Type { get; set; }
 
         /// <summary>
         /// Field which holds information about the payment handling related to the special handling.&lt;br&gt; Example: OTHER
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("paymentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PaymentType { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2319,20 +2640,26 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the size of available images for the shipment being tracked. Example: LARGE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("size", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("size")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public AvailableImagesDetailSize? Size { get; set; }
 
         /// <summary>
         /// Field which holds the type of available images for the shipment being tracked.&lt;br&gt; Example: BILL_OF_LADING
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public AvailableImagesDetailType? Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2350,69 +2677,101 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the name of the person who received the package, if applicable.&lt;br&gt; Example: Receiver
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("receivedByName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("receivedByName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ReceivedByName { get; set; }
 
         /// <summary>
         /// Field which holds the destination service area code.&lt;br&gt; Example: EDDUNAVAILABLE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationServiceArea", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationServiceArea")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DestinationServiceArea { get; set; }
 
         /// <summary>
         /// Field which holds the description corresponding to the destination service area.&lt;br&gt; Example: Appointment Required
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationServiceAreaDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationServiceAreaDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DestinationServiceAreaDescription { get; set; }
 
         /// <summary>
         /// Field which holds the FedEx location description for the package destination.&lt;br&gt; Example: Receptionist/Front Desk
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string LocationDescription { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("actualDeliveryAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("actualDeliveryAddress")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public AddressVO ActualDeliveryAddress { get; set; }
 
         /// <summary>
         /// This element indicates whether the package will be delivered today. The value 'True', indicates that today is package delivery.&lt;br&gt; Example: true
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("deliveryToday", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("deliveryToday")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? DeliveryToday { get; set; }
 
         /// <summary>
         /// Field which holds the FedEx location type code for the package destination.&lt;br&gt; Example: FEDEX_EXPRESS_STATION
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string LocationType { get; set; }
 
         /// <summary>
         /// Field which holds the name of the person who signed for the package, if applicable.&lt;br&gt; Example: Reciever
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("signedByName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("signedByName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string SignedByName { get; set; }
 
         /// <summary>
         /// Field which identifies the method of office order delivery. 'Pickup' - the recipient will be picking up the office order from the FedEx Office Center. 'Shipment' - the office order will be delivered to the recipient as a FedEx shipment using the FedEx Service Type requested. 'Courier' - the office order will be delivered to the recipient by local courier. &lt;br&gt; Example: Courier
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("officeOrderDeliveryMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("officeOrderDeliveryMethod")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string OfficeOrderDeliveryMethod { get; set; }
 
         /// <summary>
         /// Field which holds the number of delivery attempts made to deliver the package.&lt;br&gt; Example: 0
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("deliveryAttempts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("deliveryAttempts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DeliveryAttempts { get; set; }
 
         /// <summary>
         /// Specifies eligibility type for the different delivery option.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("deliveryOptionEligibilityDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("deliveryOptionEligibilityDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<DeliveryOptionElgibilityDetails> DeliveryOptionEligibilityDetails { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2430,19 +2789,25 @@ namespace FedEx.Tracking
         /// <summary>
         /// This is the type of delivery option.&lt;br&gt;&lt;br&gt;&lt;i&gt;Note: For eligibile DISPUTE_DELIVERY, RETURN_TO_SHIPPER, SUPPLEMENT_ADDRESS go to fedex.com to perform the option/action.&lt;/i&gt;&lt;br&gt;&lt;br&gt;Example: INDIRECT_SIGNATURE_RELEASE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("option", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("option")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DeliveryOptionElgibilityDetailsOption? Option { get; set; }
 
         /// <summary>
         /// Eligibility of the customer for the specific delivery options.&lt;br&gt; Example: INELIGIBLE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("eligibility", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("eligibility")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Eligibility { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2460,57 +2825,83 @@ namespace FedEx.Tracking
         /// <summary>
         /// Date and time of the scan event.&lt;br&gt; Example: '2018-02-02T12:01:00-07:00'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("date", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("date")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Date { get; set; }
 
         /// <summary>
         /// Field which holds status description of the track information for the scan event.&lt;br&gt; Example: 'Picked Up'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("derivedStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("derivedStatus")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DerivedStatus { get; set; }
 
         /// <summary>
         /// Location Details for the FedEx facility where the scan event occurred.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("scanLocation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("scanLocation")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public LocationDetail_1 ScanLocation { get; set; }
 
         /// <summary>
         /// Field which holds the text description for the exception if the event was an exception .&lt;br&gt;Example: Package available for clearance
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("exceptionDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("exceptionDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ExceptionDescription { get; set; }
 
         /// <summary>
         /// Field which holds the text description of the scan event.&lt;br&gt; Example: 'Picked Up'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("eventDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("eventDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string EventDescription { get; set; }
 
         /// <summary>
         /// Field which holds the code identifying the type of scan event.&lt;br&gt; Example: 'PU'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("eventType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("eventType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string EventType { get; set; }
 
         /// <summary>
         /// Field which holds status code of the track information for the scan event.&lt;br&gt; Example: 'PU'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("derivedStatusCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("derivedStatusCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DerivedStatusCode { get; set; }
 
         /// <summary>
         /// Field which holds the code identifier for the exception if the event was an exception. &lt;br&gt; Example: A25
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("exceptionCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("exceptionCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ExceptionCode { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("delayDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("delayDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public DelayDetail DelayDetail { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2528,19 +2919,25 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the tracking date or timestamp in ISO format.&lt;br&gt;Format: YYYY-MM-DD&lt;br&gt; Example: '2019-05-07'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("dateTime", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("dateTime")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DateTime { get; set; }
 
         /// <summary>
         /// Field which holds information about the type of tracking date or timestamp.&lt;br&gt; Example: 'ACTUAL_DELIVERY'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public TrackingDateAndTimeType? Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2558,54 +2955,79 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the physical package type for non-Express shipments.&lt;br&gt;&lt;a onclick='loadDocReference("subpackagetypes")'&gt;Click here to see Available Types&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("physicalPackagingType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("physicalPackagingType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PhysicalPackagingType { get; set; }
 
         /// <summary>
         /// Field which holds the number representing which package in a multi-piece shipment applies to this TrackDetail.&lt;br&gt; Example: 45
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("sequenceNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("sequenceNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string SequenceNumber { get; set; }
 
         /// <summary>
         /// Field which holds information about total count of the undelivered packages in the shipment. &lt;br&gt; Example: 7
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("undeliveredCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("undeliveredCount")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string UndeliveredCount { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("packagingDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("packagingDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public PackagingDescription PackagingDescription { get; set; }
 
         /// <summary>
         /// Field which holds the total number of pieces in the shipment which includes the package represented by this TrackDetail.&lt;br&gt; Example: 1
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("count")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Count { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("weightAndDimensions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("weightAndDimensions")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TrackingWeightAndDimensions WeightAndDimensions { get; set; }
 
         /// <summary>
         /// Field which holds information about the package content of the shipment. Populated for secure users only.&lt;br&gt; Example: wire hangers.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("packageContent", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("packageContent")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<string> PackageContent { get; set; }
 
         /// <summary>
         /// Field which holds information about total count of the packages in the shipment.&lt;br&gt; Example: 100
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("contentPieceCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("contentPieceCount")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ContentPieceCount { get; set; }
 
         /// <summary>
         /// This is the declared value. Declared Value represents FedEx maximum liability in connection with a shipment of that Package, including but not limited to, any loss, damage, delay, misdelivery, any failure to provide information, or misdelivery of information relating to the Shipment.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("declaredValue", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("declaredValue")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public Amount DeclaredValue { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2623,18 +3045,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the packaging type description.&lt;br&gt; Example: FedEx Pak
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Indicate the packaging type.&lt;br&gt;&lt;a onclick='loadDocReference("packagetypes")'&gt;Click here to see Package Types&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2652,18 +3080,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the weight of the package.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("weight", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("weight")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Weight> Weight { get; set; }
 
         /// <summary>
         /// Indicate the dimensions of the package.&lt;br&gt; Following conditions will apply: &lt;ul&gt;&lt;li&gt;Dimensions are optional but when added, then all three dimensions must be indicated.&lt;/li&gt;&lt;li&gt;Dimensions are required with YOUR_PACKAGING package type.&lt;/li&gt;&lt;/ul&gt;Note: The maximum/minimum dimension values varies based on the services and the packaging types. Refer &lt;a href="https://www.fedex.com/en-us/service-guide.html#" target="_blank"&gt;FedEx Service Guide&lt;/a&gt; for service details related to DIM Weighting for FedEx Express and oversize conditions for FedEx Express and FedEx Ground.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("dimensions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("dimensions")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Dimensions> Dimensions { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2681,19 +3115,25 @@ namespace FedEx.Tracking
         /// <summary>
         /// This is package weight type.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("unit", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("unit")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public WeightUnit? Unit { get; set; }
 
         /// <summary>
         /// This is package weight. Max. Length is 99999. &lt;br&gt; Example: 22222.0
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Value { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2711,31 +3151,43 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the length of the package. No implied decimal places. Maximum value: 999 &lt;br&gt; Example: 20
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("length", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("length")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public int? Length { get; set; }
 
         /// <summary>
         /// Indicate the width of the package. No implied decimal places. Maximum value: 999 &lt;br&gt; Example: 10
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("width", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("width")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public int? Width { get; set; }
 
         /// <summary>
         /// Indicate the height of the package. No implied decimal places. Maximum value: 999 &lt;br&gt; Example: 10
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("height", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("height")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public int? Height { get; set; }
 
         /// <summary>
         /// Unit of measure for the provided dimensions.&lt;br&gt;Valid Values are IN - inches, CM - centimeters. &lt;br&gt;Note: Any value other than CM including blank/null will default to IN. &lt;br&gt;Example: CM
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("units", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("units")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public DimensionsUnits? Units { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2750,18 +3202,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the currency code.&lt;br&gt; Example: USD&lt;br&gt;&lt;a onclick='loadDocReference("countrycodes")'&gt;Click here to see Currency Codes&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("currency", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("currency")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Currency { get; set; }
 
         /// <summary>
         /// Field which holds the amount value. &lt;br&gt; Example: 56.80
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public double? Value { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2779,24 +3237,28 @@ namespace FedEx.Tracking
         /// <summary>
         /// Location Identification for facilities identified by an alpha numeric location code. Passing Location Id of the Hold at Location (HAL) address is strongly recommended to ensure packages are delivered to the correct address.&lt;br&gt; Example: SEA
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string LocationId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("locationContactAndAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("locationContactAndAddress")]
         [System.ComponentModel.DataAnnotations.Required]
         public ContactAndAddress LocationContactAndAddress { get; set; } = new ContactAndAddress();
 
         /// <summary>
         /// The FedEx Location Type.&lt;br&gt; Example: PICKUP_LOCTION
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("locationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("locationType")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public LocationDetailLocationType LocationType { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2811,7 +3273,8 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ContactAndAddress
     {
-        [Newtonsoft.Json.JsonProperty("contact", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("contact")]
         [System.ComponentModel.DataAnnotations.Required]
         public ContactVO Contact { get; set; } = new ContactVO();
 
@@ -2822,13 +3285,14 @@ namespace FedEx.Tracking
         /// <br/>
         /// <br/>Conditional when used with Payor object.  Required if entering using RECIPIENT or THIRD_PARTY.  Required if not-authenticated and SENDER is selected
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("address", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("address")]
         [System.ComponentModel.DataAnnotations.Required]
         public AddressVO Address { get; set; } = new AddressVO();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2846,24 +3310,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Identifies the contact person's name. Max Length is 70.&lt;br&gt; Example: John Taylor
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("personName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("personName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PersonName { get; set; }
 
         /// <summary>
         /// Identifies the phone number associated with this contact. Max length is 15. &lt;br&gt;Example: '1234567890'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("phoneNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Identifies the company this contact is associated with. Max length is 35. &lt;br&gt; Example: Fedex
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("companyName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("companyName")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CompanyName { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2878,31 +3351,43 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CustomDeliveryOption
     {
-        [Newtonsoft.Json.JsonProperty("requestedAppointmentDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("requestedAppointmentDetail")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public RequestedAppointmentDetail RequestedAppointmentDetail { get; set; }
 
         /// <summary>
         /// Field which specifies the description of the custom delivery option requested &lt;br&gt; Example: Redirect the package to the hold location.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Field which specifies the type of the custom delivery option requested.&lt;br&gt; Example: REDIRECT_TO_HOLD_AT_LOCATION
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public CustomDeliveryOptionType? Type { get; set; }
 
         /// <summary>
         /// Field which specifies the status of the custom delivery option requested.&lt;br&gt; Example: HELD
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Status { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2920,18 +3405,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the requested appointment date.&lt;br&gt;Format: YYYY-MM-DD&lt;br&gt; example: '2019-05-07'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("date", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("date")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Date { get; set; }
 
         /// <summary>
         /// Array of different appointment time windows available on the date specified such as, Morning, afternoon, mid-day.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("window", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("window")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<TimeWindow> Window { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2946,22 +3437,30 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which describes the time window provided. &lt;br&gt; Example: Description field
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("window", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("window")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TimeRange Window { get; set; }
 
         /// <summary>
         /// Field which holds the code representing the description for the time window provided. &lt;br&gt; Example: ESTIMATED_DELIVERY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public TimeWindowType? Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -2979,18 +3478,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the begin date/timestamp for a range.&lt;br&gt; Example: '2021-10-01T08:00:00'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("begins", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("begins")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Begins { get; set; }
 
         /// <summary>
         /// Field which holds the end date/timestamp for a range.&lt;br&gt; Example: '2021-10-15T00:00:00-06:00'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("ends", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("ends")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Ends { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3008,25 +3513,34 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the piece count. &lt;br&gt; Example: 35
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("count")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Count { get; set; }
 
         /// <summary>
         /// Field which holds the piece count description detail. &lt;br&gt; Example: picec count description
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Field which holds the piece count location type. &lt;br&gt; Example: ORIGIN
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public PieceCountDetailType? Type { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3044,36 +3558,51 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds information about contents of the shipment. Populated for secure users only.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("contents", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("contents")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<ShipmentContent> Contents { get; set; }
 
         /// <summary>
         /// Indicates the shipment is not yet in FedEx possession, but is still in shipper's possession.&lt;br&gt; Example: false
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("beforePossessionStatus", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("beforePossessionStatus")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? BeforePossessionStatus { get; set; }
 
         /// <summary>
         /// Array of package level weights, which represent the total weight of the shipment.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("weight", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("weight")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Weight> Weight { get; set; }
 
         /// <summary>
         /// Field which holds information about content piece count of the shipment.&lt;br&gt; Example: 3333
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("contentPieceCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("contentPieceCount")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ContentPieceCount { get; set; }
 
         /// <summary>
         /// Field which holds information about split shipments.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("splitShipments", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("splitShipments")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<TrackSplitShipment> SplitShipments { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3091,30 +3620,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field holds the item number for the contents of shipment. &lt;br&gt; Example: RZ5678 
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("itemNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("itemNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ItemNumber { get; set; }
 
         /// <summary>
         /// Field which holds information about the quantity received. &lt;br&gt; Example: 13
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("receivedQuantity", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("receivedQuantity")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ReceivedQuantity { get; set; }
 
         /// <summary>
         /// Field which holds informative description about shipment content. &lt;br&gt; Example:  pulyurethane rope
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Description { get; set; }
 
         /// <summary>
         /// Holds the part number of the content in shipment. &lt;br&gt; Example: RK1345
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("partNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("partNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PartNumber { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3132,30 +3673,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the number of pieces in the part.&lt;br&gt; Example: 10
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("pieceCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("pieceCount")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PieceCount { get; set; }
 
         /// <summary>
         /// Field which holds human-readable description of the status. &lt;br&gt; Example: status
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("statusDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("statusDescription")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string StatusDescription { get; set; }
 
         /// <summary>
         /// Field which holds the date and time the status began.&lt;br&gt;Example: '2019-05-07T08:00:07'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("timestamp", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("timestamp")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Timestamp { get; set; }
 
         /// <summary>
         /// Field which holds the status code. &lt;br&gt; Example: statusCode
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("statusCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string StatusCode { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3173,25 +3726,34 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies the api alert code.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// Specifies the api alert type.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alertType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alertType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public AlertType? AlertType { get; set; }
 
         /// <summary>
         /// Specifies the api alert message.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3206,21 +3768,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError_2> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3238,21 +3808,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: TRACKING.TRACKINGNUMBER.EMPTY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: Please provide tracking number.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3267,15 +3845,20 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError401> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3293,24 +3876,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: NOT.AUTHORIZED.ERROR
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: Access token expired. Please modify your request and try again.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3325,15 +3917,20 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError403> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3351,24 +3948,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: FORBIDDEN.ERROR
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: We could not authorize your credentials. Please check your permissions and try again
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3383,15 +3989,20 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError404> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3409,24 +4020,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: NOT.FOUND.ERROR
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: The resource you requested is no longer available. Please modify your request and try again.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3441,21 +4061,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError500> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3473,24 +4101,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: INTERNAL.SERVER.ERROR
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: We encountered an unexpected error and are working to resolve the issue. We apologize for any inconvenience. Please check back at a later time.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3505,15 +4142,20 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError503> Errors { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3531,24 +4173,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates the error code.&lt;br&gt;Example: SERVICE.UNAVAILABLE.ERROR
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("code", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("code")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Code { get; set; }
 
         /// <summary>
         /// List of parameters.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("parameterList", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("parameterList")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Parameter> ParameterList { get; set; }
 
         /// <summary>
         /// Indicates the description of API error alert message.&lt;br&gt;Example: The service is currently unavailable and we are working to resolve the issue. We apologize for any inconvenience. Please check back at a later time.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object Message { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3566,40 +4217,48 @@ namespace FedEx.Tracking
         /// <summary>
         /// Placeholder for Sender contact name.&lt;br&gt; Example: Sam Smith
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("senderContactName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("senderContactName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SenderContactName { get; set; }
 
         /// <summary>
         /// Email address of the sender from which the shipment notification will be sent.&lt;br&gt;Example: LSR123@gmail.com
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("senderEMailAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("senderEMailAddress")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SenderEMailAddress { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("trackingEventNotificationDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("trackingEventNotificationDetail")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackingEventNotificationDetail TrackingEventNotificationDetail { get; set; } = new TrackingEventNotificationDetail();
 
-        [Newtonsoft.Json.JsonProperty("trackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackingNumberInfo TrackingNumberInfo { get; set; } = new TrackingNumberInfo();
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number in a specific time range. &lt;br&gt;Format: YYYY-MM-DD&lt;br&gt;example:'2019-10-13'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateBegin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateBegin")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateBegin { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number in a specific time range. &lt;br&gt;Format: YYYY-MM-DD&lt;br&gt;example:'2019-10-13'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateEnd", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateEnd")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateEnd { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3617,25 +4276,32 @@ namespace FedEx.Tracking
         /// <summary>
         /// List of Tracking notifications requested for events like ON_DELIVERY, ON_ESTIMATED_DELIVERY, ON_EXCEPTION, ON_TENDER.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNotifications", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNotifications")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<TrackingNotification> TrackingNotifications { get; set; } = new System.Collections.ObjectModel.Collection<TrackingNotification>();
 
         /// <summary>
         /// An optional message which will be included in the body of the email.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("personalMessage", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("personalMessage")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string PersonalMessage { get; set; }
 
         /// <summary>
         /// If value is 'true' then html tags are included in the response date.  If 'false' they are not provided in the response.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("supportHTML", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("supportHTML")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public object SupportHTML { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3650,32 +4316,40 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class TrackingNotification
     {
-        [Newtonsoft.Json.JsonProperty("notificationDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("notificationDetail")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackingNotificationDetail NotificationDetail { get; set; } = new TrackingNotificationDetail();
 
         /// <summary>
         /// This is to specify Recipient_Role in the shipment. &lt;br&gt;Possible values - BROKER, OTHER, RECIPIENT, SHIPPER &lt;br&gt; Example: SHIPPER
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("role")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Role { get; set; }
 
         /// <summary>
         /// Identifies the events for which the client is requesting notifications. &lt;br&gt;Possible Values are: ON_DELIVERY, ON_ESTIMATED_DELIVERY, ON_EXCEPTION, ON_TENDER
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("notificationEventTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("notificationEventTypes")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> NotificationEventTypes { get; set; } = new System.Collections.ObjectModel.Collection<string>();
 
         /// <summary>
         /// If value is 'true' the current tracking results for the shipment along with notification details will be provided to the client. If 'false' only results for the notification request is provided.&lt;br&gt;Defaults to 'false'&lt;br&gt;Example: true
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("currentResultRequestedFlag", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("currentResultRequestedFlag")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? CurrentResultRequestedFlag { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3690,24 +4364,26 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class TrackingNotificationDetail
     {
-        [Newtonsoft.Json.JsonProperty("localization", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("localization")]
         [System.ComponentModel.DataAnnotations.Required]
         public Localization Localization { get; set; } = new Localization();
 
-        [Newtonsoft.Json.JsonProperty("emailDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("emailDetail")]
         [System.ComponentModel.DataAnnotations.Required]
         public EmailDetail EmailDetail { get; set; } = new EmailDetail();
 
         /// <summary>
         /// Identifies the format of the notification. &lt;br&gt;valid values are 'HTML' or 'TEXT'.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("notificationType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("notificationType")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string NotificationType { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3725,19 +4401,23 @@ namespace FedEx.Tracking
         /// <summary>
         /// Identifies two-letter code for the language (e.g. en/EN, fr/FR, es/ES etc..).&lt;br&gt; Example: en
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("languageCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("languageCode")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string LanguageCode { get; set; }
 
         /// <summary>
         /// Identifies the two-letter code for the region, used to further identify the requested language.  for example, if you request Spanish, you must include a locale code of &lt;i&gt;US&lt;/i&gt; for North American Spanish, or &lt;i&gt;MX&lt;/i&gt; for Mexico. &lt;br&gt; Example: US&lt;br&gt;&lt;a onclick='loadDocReference("locales")'&gt;Click here to see Locales&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("localeCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("localeCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string LocaleCode { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3755,19 +4435,23 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies email address on which user wants to get notified for various registered events.&lt;br&gt;Example: p1@fedex.com
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("emailAddress")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string EmailAddress { get; set; }
 
         /// <summary>
         /// Specifies the name of the notification recipient.&lt;br&gt;Example: Sam Smith
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Name { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3785,26 +4469,33 @@ namespace FedEx.Tracking
         /// <summary>
         /// This is a Tracking number for FedEx packages used for tracking a single package or group of packages. &lt;br&gt; Example: 128667043726&lt;br&gt;&lt;a onclick='loadDocReference("mocktrackingnumbersforfedexexpressandfedexground")'&gt;Click here to see Mock Tracking Numbers.&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumber")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string TrackingNumber { get; set; }
 
         /// <summary>
         /// This is a placeholder to provide the FedEx operating company (transportation) code used for package delivery. &lt;br&gt; Example: FDXE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("carrierCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+
+        [System.Text.Json.Serialization.JsonPropertyName("carrierCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter))]
         public TrackingNumberInfo_2CarrierCode? CarrierCode { get; set; }
 
         /// <summary>
         /// Unique identifier used to distinguish duplicate FedEx tracking numbers. This value will be set by FedEx systems. &lt;br&gt; Example: 245822\~123456789012\~FDEG
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingNumberUniqueId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberUniqueId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TrackingNumberUniqueId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3822,21 +4513,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_Notification Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3851,30 +4550,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Tracking number information which uniquely identifies a package. Tracking number information includes tracking number, carrier code and a unique qualifier.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("TrackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("TrackingNumberInfo")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public TrackingNumberInfo_2 TrackingNumberInfo { get; set; }
 
         /// <summary>
         /// Address where the package was actually delivered. Contrast with destination Address, which is the location to which the package was intended to be delivered. Addresses may differ due to delivery to a neighbor, hold at FedEx location, etc.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationAddress", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationAddress")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public AddressVO DestinationAddress { get; set; }
 
         /// <summary>
         /// Details of the recipient notification events. Possible events are - ON_DELIVERY, ON_ESTIMATED_DELIVERY, ON_EXCEPTION, ON_TENDER.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("recipientDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("recipientDetails")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<NotificationEventTypes> RecipientDetails { get; set; }
 
         /// <summary>
         /// The cxs shipment alerts. This includes the alert type, code, and            message.&lt;br&gt;example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3898,19 +4609,23 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Full_Schema_Tracking_References
     {
-        [Newtonsoft.Json.JsonProperty("referencesInformation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("referencesInformation")]
         [System.ComponentModel.DataAnnotations.Required]
         public ReferenceInformation ReferencesInformation { get; set; } = new ReferenceInformation();
 
         /// <summary>
         /// Indicates if the detailed scans are being requested or not. If true, the detailed scans will be included in the response returned. &lt;br&gt;Valid values are True or False.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("includeDetailedScans", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("includeDetailedScans")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? IncludeDetailedScans { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3928,57 +4643,75 @@ namespace FedEx.Tracking
         /// <summary>
         /// Specifies which carrier should be included.&lt;br&gt; Example: FDXE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("carrierCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("carrierCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CarrierCode { get; set; }
 
         /// <summary>
         /// Specify the type of alternate reference used. This is Conditionally required.&lt;br&gt; Valid Values :&lt;ul&gt;&lt;li&gt;BILL_OF_LADING&lt;/li&gt;&lt;li&gt;COD_RETURN_TRACKING_NUMBER&lt;/li&gt;&lt;li&gt;CUSTOMER_AUTHORIZATION_NUMBER&lt;/li&gt;&lt;li&gt;CUSTOMER_REFERENCE&lt;/li&gt;&lt;li&gt;DEPARTMENT&lt;/li&gt;&lt;li&gt;DOCUMENT_AIRWAY_BILL&lt;/li&gt;&lt;li&gt;EXPRESS_ALTERNATE_REFERENCE&lt;/li&gt;&lt;li&gt;FEDEX_OFFICE_JOB_ORDER_NUMBER&lt;/li&gt;&lt;li&gt;FREE_FORM_REFERENCE&lt;/li&gt;&lt;li&gt;GROUND_INTERNATIONAL&lt;/li&gt;&lt;li&gt;GROUND_SHIPMENT_ID&lt;/li&gt;&lt;li&gt;INTERNATIONAL_DISTRIBUTION&lt;/li&gt;&lt;li&gt;INVOICE&lt;/li&gt;&lt;li&gt;JOB_GLOBAL_TRACKING_NUMBER&lt;/li&gt;&lt;li&gt;ORDER_GLOBAL_TRACKING_NUMBER&lt;/li&gt;&lt;li&gt;ORDER_TO_PAY_NUMBER&lt;/li&gt;&lt;li&gt;PART_NUMBER&lt;/li&gt;&lt;li&gt;PARTNER_CARRIER_NUMBER&lt;/li&gt;&lt;li&gt;PURCHASE_ORDER&lt;/li&gt;&lt;li&gt;REROUTE_TRACKING_NUMBER&lt;/li&gt;&lt;li&gt;RETURN_MATERIALS_AUTHORIZATION&lt;/li&gt;&lt;li&gt;RETURNED_TO_SHIPPER_TRACKING_NUMBER&lt;/li&gt;&lt;li&gt;SHIPPER_REFERENCE&lt;/li&gt;&lt;li&gt;TRANSBORDER_DISTRIBUTION&lt;/li&gt;&lt;li&gt;TRANSPORTATION_CONTROL_NUMBER&lt;/li&gt;&lt;li&gt;VIRTUAL_CONSOLIDATION&lt;/li&gt;&lt;/ul&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Type { get; set; }
 
         /// <summary>
         /// Conditionally required. &lt;br&gt;Specifies the alternate reference value. &lt;br&gt; Example: 56754674567546754
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Value { get; set; }
 
         /// <summary>
         /// Conditionally required. &lt;br&gt;Specifies the shipper's account number. &lt;br&gt; Note: Either account number or destination postal code and country code are mandatory to track by reference.&lt;br&gt; Example: 697561862
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("accountNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string AccountNumber { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD &lt;br&gt; Example: 2020-03-29
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateBegin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateBegin")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string ShipDateBegin { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD &lt;br&gt; Example: 2020-04-01
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateEndDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateEndDate")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string ShipDateEndDate { get; set; }
 
         /// <summary>
         /// Conditionally required. &lt;br&gt;Specifies the recipient's country code. &lt;br&gt; Note: Either account number or destination postal code and country code are mandatory to track by reference.&lt;br&gt; Example: US&lt;br&gt;&lt;a onclick='loadDocReference("countrycodes")'&gt;Click here to see Country Codes&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationCountryCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationCountryCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DestinationCountryCode { get; set; }
 
         /// <summary>
         /// Conditionally required. &lt;br&gt;Indicate recipient postal code. Required for postal-aware countries. &lt;br&gt; Note: Either account number or destination postal code and country code are mandatory to track by reference. &lt;br&gt; Example: 75063&lt;br&gt;&lt;a onclick='loadDocReference("postalawarecountries")'&gt;Click here to see Postal aware countries&lt;/a&gt;
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("destinationPostalCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("destinationPostalCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DestinationPostalCode { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -3996,21 +4729,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_ReferenceNumber Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4028,30 +4769,42 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates error alert when suspicious files, potential exploits and viruses found while scanning files , directories and user accounts. This includes code, message and parameter.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("cxsErrors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("cxsErrors")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CXSError> CxsErrors { get; set; }
 
         /// <summary>
         /// Contains detailed tracking entry information.  &lt;br&gt;Valid values: ACTUAL_DELIVERY, ACTUAL_PICKKUP, ACTUAL_TENDER, ANTICIPATED_TENDER, APPOINTMENT_DELIVERY, ATTEMPTED_DELIVERY, COMMITMENT, ESTIMATED_ARRIVAL_AT_GATEWAY, ESTIMATED_DELIVERY, ESTIMATED_PICKUP, ESTIMATED_RETURN_TO_STATION, SHIP, SHIPMENT_DATE_RECEIVED
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("completeTrackResults", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("completeTrackResults")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CompleteTrackResult> CompleteTrackResults { get; set; }
 
         /// <summary>
         /// The cxs alert type, alert code, and alert message that is received.&lt;br&gt;example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         /// <summary>
         /// Indicates whether the tracking is successful.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("successful", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("successful")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? Successful { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4069,19 +4822,23 @@ namespace FedEx.Tracking
         /// <summary>
         /// The information associated with the transportation control number.&lt;br&gt;Only 1 TCN is supported per request.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("tcnInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("tcnInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public TCNInfo TcnInfo { get; set; } = new TCNInfo();
 
         /// <summary>
         /// Indicates if detailed scans are requested or not. &lt;br/&gt;Valid values are True, or False.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("includeDetailedScans", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("includeDetailedScans")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public bool? IncludeDetailedScans { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4096,31 +4853,41 @@ namespace FedEx.Tracking
         /// <summary>
         /// Field which holds the Transportation Control Number value.&lt;br&gt; Example: N552428361Y555XXX
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Value { get; set; }
 
         /// <summary>
         /// Field which holds information about carrier code of the shipment.&lt;br&gt; Example: FDXE
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("carrierCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("carrierCode")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CarrierCode { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD &lt;br&gt; Example: 2020-03-29
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateBegin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateBegin")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateBegin { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number within a specific date range. &lt;br&gt;Format: YYYY-MM-DD &lt;br&gt; Example: 2020-04-01
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateEnd", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateEnd")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateEnd { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4138,21 +4905,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_TCN Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4170,18 +4945,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Contains detailed tracking entry information.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("completeTrackResults", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("completeTrackResults")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CompleteTrackResult> CompleteTrackResults { get; set; }
 
         /// <summary>
         /// alert type, alert code, and alert message&lt;br&gt;Example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4196,15 +4977,20 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Parameter_2
     {
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("value")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Value { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("key", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("key")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string Key { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4219,20 +5005,22 @@ namespace FedEx.Tracking
         /// <summary>
         /// This object specifies the tracking document details such as types of documents, for example, SIGNATURE_PROOF_OF_DELIVERY and also the format of tracking document. Supported values are PDF and PNG. Default is PDF.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackDocumentDetail", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackDocumentDetail")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackDocumentDetail TrackDocumentDetail { get; set; } = new TrackDocumentDetail();
 
         /// <summary>
         /// This is the placeholder for document specification details required to identify the shipment being tracked. This includes tracking information such as tracking qualifier, carrier code, and tracking number.&lt;br&gt;At least one trackDocumentSpecification is required. Maximum limit is 30.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackDocumentSpecification", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackDocumentSpecification")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<TrackDocumentSpecification> TrackDocumentSpecification { get; set; } = new System.Collections.ObjectModel.Collection<TrackDocumentSpecification>();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4250,19 +5038,23 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicate the Tracking Document. &lt;br&gt;Valid values are SIGNATURE_PROOF_OF_DELIVERY, BILL_OF_LADING and FREIGHT_BILLING_DOCUMENT.&lt;br&gt;Example: SIGNATURE_PROOF_OF_DELIVERY.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("documentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("documentType")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string DocumentType { get; set; }
 
         /// <summary>
         /// Specifies the format of tracking document. &lt;br&gt;Valid values are PDF or PNG.&lt;br&gt;The values are key sensitive.&lt;br&gt;Note: documentTypes BILL_OF_LADING and FREIGHT_BILLING_DOCUMENT does not support PNG.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("documentFormat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("documentFormat")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DocumentFormat { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4274,31 +5066,41 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class TrackDocumentSpecification
     {
-        [Newtonsoft.Json.JsonProperty("trackingNumberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingNumberInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public TrackingNumberInfo2 TrackingNumberInfo { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are used to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number during a specific date range.&lt;br&gt;Format: YYYY-MM-DD&lt;br&gt;example: '2020-03-29'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateBegin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateBegin")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateBegin { get; set; }
 
         /// <summary>
         /// ShipDateBegin and ShipDateEnd are recommended to narrow the search, reduce lookup time, and avoid duplicates when searching for a specific tracking number during a specific date range.&lt;br&gt;Format: YYYY-MM-DD&lt;br&gt;example: '2020-04-01'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shipDateEnd", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("shipDateEnd")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string ShipDateEnd { get; set; }
 
         /// <summary>
         /// Specifies Signature Proof of Delivery(SPOD) account number for the shipment being tracked.&lt;br&gt;Conditionally required when documentType is BILL_OF_LADING or FREIGHT_BILLING_DOCUMENT&lt;br&gt;Example: 123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("accountNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string AccountNumber { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4316,21 +5118,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_SPOD Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4342,36 +5152,51 @@ namespace FedEx.Tracking
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class BaseProcessOutputVO_SPOD
     {
-        [Newtonsoft.Json.JsonProperty("localization", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("localization")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public Localization Localization { get; set; }
 
         /// <summary>
         /// The types of tracking document.&lt;br&gt; Example: SIGNATURE_PROOF_OF_DELIVERY
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("documentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("documentType")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DocumentType { get; set; }
 
         /// <summary>
         /// The format of the tracking document. &lt;br&gt;Valid values are PDF and PNG.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("documentFormat", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("documentFormat")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string DocumentFormat { get; set; }
 
         /// <summary>
         /// Specifies the image of the recipient's signature (if the signature is available) once the shipment has been delivered. &lt;br&gt;Example: [byte1,byte2]
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("document", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("document")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<byte[]> Document { get; set; }
 
         /// <summary>
         /// Specifies the alert received when the recipient's signature has been            taken as a proof of shipment delivery.&lt;br&gt;Example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4389,19 +5214,21 @@ namespace FedEx.Tracking
         /// <summary>
         /// Indicates if detailed scans are requested or not. &lt;br/&gt;Valid values are True, or False.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("includeDetailedScans", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("includeDetailedScans")]
         public bool IncludeDetailedScans { get; set; }
 
         /// <summary>
         /// The tracking information of the shipment to be tracked. At least one occurrence of TrackingInfo is required. Maximum limit is 30.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("trackingInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("trackingInfo")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<MasterTrackingInfo> TrackingInfo { get; set; } = new System.Collections.ObjectModel.Collection<MasterTrackingInfo>();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4419,21 +5246,29 @@ namespace FedEx.Tracking
         /// <summary>
         /// The transaction ID is a special set of numbers that defines each transaction.&lt;br&gt;Example: 624deea6-b709-470c-8c39-4b5511281492
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("transactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("transactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string TransactionId { get; set; }
 
         /// <summary>
         /// This element allows you to assign a unique identifier to your transaction. This element is also returned in the reply and helps you match the request to the reply. &lt;br&gt; Example: AnyCo_order123456789
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("customerTransactionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("customerTransactionId")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public string CustomerTransactionId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("output", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonPropertyName("output")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public BaseProcessOutputVO_TrackingNumber Output { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
@@ -4451,18 +5286,24 @@ namespace FedEx.Tracking
         /// <summary>
         /// Contains detailed tracking entry information. &lt;br&gt;Valid values are- ACTUAL_DELIVERY, ACTUAL_PICKUP, ACTUAL_TENDER, ANTICIPATED_TENDER, APPOINTMENT_DELIVERY, ATTEMPTED_DELIVERY, COMMITMENT, ESTIMATED_ARRIVAL_AT_GATEWAY, ESTIMATED_DELIVERY, ESTIMATED_PICKUP, ESTIMATED_RETURN_TO_STATION, SHIP, SHIPMENT_DATA_RECEIVED.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("completeTrackResults", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("completeTrackResults")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<CompleteTrackResult> CompleteTrackResults { get; set; }
 
         /// <summary>
         /// The cxs alert type, alert code and alert message&lt;br&gt;Example: TRACKING.DATA.NOTFOUND -  Tracking data unavailable
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("alerts", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+
+        [System.Text.Json.Serialization.JsonPropertyName("alerts")]
+
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]   
         public System.Collections.Generic.ICollection<Alert> Alerts { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
 
-        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
         public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
         {
             get { return _additionalProperties; }
