@@ -29,7 +29,7 @@ public class TrackingHelper
             var fullSchemaTrackingNumbers = new Full_Schema_Tracking_Numbers();
             fullSchemaTrackingNumbers.TrackingInfo.Add(new MasterTrackingInfo() { TrackingNumberInfo = new TrackingNumberInfo { TrackingNumber = trackingNumber } });
 
-            var trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {await _token.GetValueAsync()}");
+            TrkcResponseVO_TrackingNumber? trackingnumbersAsync = await client.TrackV1TrackingnumbersAsync(fullSchemaTrackingNumbers, Guid.NewGuid().ToString(), "application/json", "en_US", $"Bearer {await _token.GetValueAsync()}");
             foreach (var outputCompleteTrackResult in trackingnumbersAsync.Output.CompleteTrackResults)
             {
                 foreach (var trackResult in outputCompleteTrackResult.TrackResults)

@@ -1,0 +1,687 @@
+﻿{
+  "transactionId": "1107a74a-8d47-4398-a066-e7e17a0df9af",
+  "customerTransactionId": "6ff9828d-4d7e-42f4-b791-2be83dcbb9b7",
+  "output": {
+    "completeTrackResults": [
+      {
+        "trackingNumber": "277643406965",
+        "trackResults": [
+          {
+            "trackingNumberInfo": {
+              "trackingNumber": "277643406965",
+              "trackingNumberUniqueId": "2459829000~277643406965~FX",
+              "carrierCode": "FDXE"
+            },
+            "additionalTrackingInfo": {
+              "nickname": "",
+              "hasAssociatedShipments": false
+            },
+            "shipperInformation": {
+              "contact": {},
+              "address": {
+                "city": "Chantilly",
+                "stateOrProvinceCode": "VA",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "recipientInformation": {
+              "contact": {},
+              "address": {
+                "city": "FARMERS BRANCH",
+                "stateOrProvinceCode": "TX",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "latestStatusDetail": {
+              "code": "AR",
+              "derivedCode": "IT",
+              "statusByLocale": "In transit",
+              "description": "Arrived at FedEx location",
+              "scanLocation": {
+                "city": "GREENSBORO",
+                "stateOrProvinceCode": "NC",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              },
+              "delayDetail": { "status": "ON_TIME" }
+            },
+            "dateAndTimes": [
+              {
+                "type": "ESTIMATED_DELIVERY",
+                "dateTime": "2022-09-08T20:00:00-05:00"
+              },
+              {
+                "type": "COMMITMENT",
+                "dateTime": "2022-09-08T20:00:00-05:00"
+              },
+              {
+                "type": "ACTUAL_PICKUP",
+                "dateTime": "2022-09-06T16:19:00-04:00"
+              },
+              {
+                "type": "SHIP",
+                "dateTime": "2022-09-06T00:00:00-06:00"
+              },
+              {
+                "type": "ACTUAL_TENDER",
+                "dateTime": "2022-09-06T16:19:00-04:00"
+              }
+            ],
+            "availableImages": [],
+            "specialHandlings": [
+              {
+                "type": "DELIVER_WEEKDAY",
+                "description": "Deliver Weekday",
+                "paymentType": "OTHER"
+              },
+              {
+                "type": "RESIDENTIAL_DELIVERY",
+                "description": "Residential Delivery",
+                "paymentType": "OTHER"
+              }
+            ],
+            "packageDetails": {
+              "packagingDescription": {
+                "type": "YOUR_PACKAGING",
+                "description": "Your Packaging"
+              },
+              "sequenceNumber": "1",
+              "count": "1",
+              "weightAndDimensions": {
+                "weight": [
+                  {
+                    "value": "2.0",
+                    "unit": "LB"
+                  },
+                  {
+                    "value": "0.91",
+                    "unit": "KG"
+                  }
+                ],
+                "dimensions": [
+                  {
+                    "length": 28,
+                    "width": 9,
+                    "height": 3,
+                    "units": "IN"
+                  },
+                  {
+                    "length": 71,
+                    "width": 22,
+                    "height": 7,
+                    "units": "CM"
+                  }
+                ]
+              },
+              "packageContent": []
+            },
+            "shipmentDetails": {
+              "possessionStatus": true,
+              "weight": [
+                {
+                  "value": "2.0",
+                  "unit": "LB"
+                },
+                {
+                  "value": "0.91",
+                  "unit": "KG"
+                }
+              ]
+            },
+            "scanEvents": [
+              {
+                "date": "2022-09-07T07:12:00-04:00",
+                "eventType": "AO",
+                "eventDescription": "Shipment arriving On-Time",
+                "exceptionCode": "",
+                "exceptionDescription": "",
+                "scanLocation": {
+                  "streetLines": [ "" ],
+                  "city": "GREENSBORO",
+                  "stateOrProvinceCode": "NC",
+                  "postalCode": "27410",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                },
+                "locationId": "GSOHD",
+                "locationType": "FEDEX_FACILITY",
+                "derivedStatusCode": "IT",
+                "derivedStatus": "In transit"
+              }
+            ],
+            "availableNotifications": [ "ON_DELIVERY", "ON_EXCEPTION" ],
+            "deliveryDetails": {
+              "deliveryAttempts": "0",
+              "deliveryOptionEligibilityDetails": [
+                {
+                  "option": "INDIRECT_SIGNATURE_RELEASE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "REDIRECT_TO_HOLD_AT_LOCATION",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "REROUTE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "RESCHEDULE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "RETURN_TO_SHIPPER",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "DISPUTE_DELIVERY",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "SUPPLEMENT_ADDRESS",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                }
+              ]
+            },
+            "originLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "HERNDON",
+                  "stateOrProvinceCode": "VA",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationId": "BCBA"
+            },
+            "destinationLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "FARMERS BRANCH",
+                  "stateOrProvinceCode": "TX",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationType": ""
+            },
+            "lastUpdatedDestinationAddress": {
+              "city": "DALLAS",
+              "stateOrProvinceCode": "TX",
+              "countryCode": "US",
+              "residential": false,
+              "countryName": "United States"
+            },
+            "serviceDetail": {
+              "type": "FEDEX_2_DAY",
+              "description": "FedEx 2Day",
+              "shortDescription": "P-2"
+            },
+            "standardTransitTimeWindow": { "window": { "ends": "2022-09-08T20:00:00-05:00" } },
+            "estimatedDeliveryTimeWindow": { "window": {} },
+            "goodsClassificationCode": "",
+            "returnDetail": {}
+          }
+        ]
+      },
+      {
+        "trackingNumber": "277632182825",
+        "trackResults": [
+          {
+            "trackingNumberInfo": {
+              "trackingNumber": "277632182825",
+              "trackingNumberUniqueId": "2459829000~277632182825~FX",
+              "carrierCode": "FDXE"
+            },
+            "additionalTrackingInfo": {
+              "nickname": "",
+              "hasAssociatedShipments": false
+            },
+            "shipperInformation": {
+              "contact": {},
+              "address": {
+                "city": "Chantilly",
+                "stateOrProvinceCode": "VA",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "recipientInformation": {
+              "contact": {},
+              "address": {
+                "city": "REDLANDS",
+                "stateOrProvinceCode": "CA",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "latestStatusDetail": {
+              "code": "AR",
+              "derivedCode": "IT",
+              "statusByLocale": "In transit",
+              "description": "Arrived at FedEx location",
+              "scanLocation": {
+                "city": "NEWARK",
+                "stateOrProvinceCode": "NJ",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              },
+              "delayDetail": { "status": "ON_TIME" }
+            },
+            "dateAndTimes": [
+              {
+                "type": "ESTIMATED_DELIVERY",
+                "dateTime": "2022-09-08T20:00:00-07:00"
+              },
+              {
+                "type": "COMMITMENT",
+                "dateTime": "2022-09-08T20:00:00-07:00"
+              },
+              {
+                "type": "ACTUAL_PICKUP",
+                "dateTime": "2022-09-06T16:19:00-04:00"
+              },
+              {
+                "type": "SHIP",
+                "dateTime": "2022-09-06T00:00:00-06:00"
+              },
+              {
+                "type": "ACTUAL_TENDER",
+                "dateTime": "2022-09-06T16:19:00-04:00"
+              }
+            ],
+            "availableImages": [],
+            "specialHandlings": [
+              {
+                "type": "DELIVER_WEEKDAY",
+                "description": "Deliver Weekday",
+                "paymentType": "OTHER"
+              },
+              {
+                "type": "RESIDENTIAL_DELIVERY",
+                "description": "Residential Delivery",
+                "paymentType": "OTHER"
+              }
+            ],
+            "packageDetails": {
+              "packagingDescription": {
+                "type": "YOUR_PACKAGING",
+                "description": "Your Packaging"
+              },
+              "sequenceNumber": "1",
+              "count": "1",
+              "weightAndDimensions": {
+                "weight": [
+                  {
+                    "value": "2.0",
+                    "unit": "LB"
+                  },
+                  {
+                    "value": "0.91",
+                    "unit": "KG"
+                  }
+                ],
+                "dimensions": [
+                  {
+                    "length": 28,
+                    "width": 9,
+                    "height": 3,
+                    "units": "IN"
+                  },
+                  {
+                    "length": 71,
+                    "width": 22,
+                    "height": 7,
+                    "units": "CM"
+                  }
+                ]
+              },
+              "packageContent": []
+            },
+            "shipmentDetails": {
+              "possessionStatus": true,
+              "weight": [
+                {
+                  "value": "2.0",
+                  "unit": "LB"
+                },
+                {
+                  "value": "0.91",
+                  "unit": "KG"
+                }
+              ]
+            },
+            "scanEvents": [
+              {
+                "date": "2022-09-07T05:28:00-04:00",
+                "eventType": "AR",
+                "eventDescription": "Arrived at FedEx hub",
+                "exceptionCode": "",
+                "exceptionDescription": "",
+                "scanLocation": {
+                  "streetLines": [ "" ],
+                  "city": "NEWARK",
+                  "stateOrProvinceCode": "NJ",
+                  "postalCode": "07114",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                },
+                "locationId": "EWRHB",
+                "locationType": "FEDEX_FACILITY",
+                "derivedStatusCode": "IT",
+                "derivedStatus": "In transit"
+              }
+            ],
+            "availableNotifications": [ "ON_DELIVERY", "ON_EXCEPTION" ],
+            "deliveryDetails": {
+              "deliveryAttempts": "0",
+              "deliveryOptionEligibilityDetails": [
+                {
+                  "option": "INDIRECT_SIGNATURE_RELEASE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "REDIRECT_TO_HOLD_AT_LOCATION",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "REROUTE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "RESCHEDULE",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "RETURN_TO_SHIPPER",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "DISPUTE_DELIVERY",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "SUPPLEMENT_ADDRESS",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                }
+              ]
+            },
+            "originLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "HERNDON",
+                  "stateOrProvinceCode": "VA",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationId": "BCBA"
+            },
+            "destinationLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "REDLANDS",
+                  "stateOrProvinceCode": "CA",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationType": ""
+            },
+            "lastUpdatedDestinationAddress": {
+              "city": "REDLANDS",
+              "stateOrProvinceCode": "CA",
+              "countryCode": "US",
+              "residential": false,
+              "countryName": "United States"
+            },
+            "serviceDetail": {
+              "type": "FEDEX_2_DAY",
+              "description": "FedEx 2Day",
+              "shortDescription": "P-2"
+            },
+            "standardTransitTimeWindow": { "window": { "ends": "2022-09-08T20:00:00-07:00" } },
+            "estimatedDeliveryTimeWindow": { "window": {} },
+            "goodsClassificationCode": "",
+            "returnDetail": {}
+          }
+        ]
+      },
+      {
+        "trackingNumber": "277660409875",
+        "trackResults": [
+          {
+            "trackingNumberInfo": {
+              "trackingNumber": "277660409875",
+              "trackingNumberUniqueId": "2459829000~277660409875~FX",
+              "carrierCode": "FDXE"
+            },
+            "additionalTrackingInfo": {
+              "nickname": "",
+              "hasAssociatedShipments": false
+            },
+            "shipperInformation": {
+              "contact": {},
+              "address": {
+                "city": "Chantilly",
+                "stateOrProvinceCode": "VA",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "recipientInformation": {
+              "contact": {},
+              "address": {
+                "city": "DIAMOND BAR",
+                "stateOrProvinceCode": "CA",
+                "countryCode": "US",
+                "residential": false,
+                "countryName": "United States"
+              }
+            },
+            "latestStatusDetail": {
+              "code": "OC",
+              "derivedCode": "IN",
+              "statusByLocale": "Initiated",
+              "description": "Shipment information sent to FedEx",
+              "scanLocation": { "residential": false },
+              "ancillaryDetails": [
+                {
+                  "reason": "IN001",
+                  "reasonDescription": "Please check back later for shipment status or subscribe for e-mail notifications",
+                  "action": "",
+                  "actionDescription": ""
+                }
+              ]
+            },
+            "dateAndTimes": [
+              {
+                "type": "ESTIMATED_DELIVERY",
+                "dateTime": "2022-09-08T20:00:00-07:00"
+              },
+              {
+                "type": "COMMITMENT",
+                "dateTime": "2022-09-08T20:00:00-07:00"
+              },
+              {
+                "type": "ANTICIPATED_TENDER",
+                "dateTime": "2022-09-06T00:00:00-06:00"
+              }
+            ],
+            "availableImages": [],
+            "specialHandlings": [
+              {
+                "type": "DELIVER_WEEKDAY",
+                "description": "Deliver Weekday",
+                "paymentType": "OTHER"
+              },
+              {
+                "type": "RESIDENTIAL_DELIVERY",
+                "description": "Residential Delivery",
+                "paymentType": "OTHER"
+              }
+            ],
+            "packageDetails": {
+              "packagingDescription": {
+                "type": "YOUR_PACKAGING",
+                "description": "Your Packaging"
+              },
+              "sequenceNumber": "1",
+              "count": "1",
+              "weightAndDimensions": {
+                "weight": [
+                  {
+                    "value": "2.0",
+                    "unit": "LB"
+                  },
+                  {
+                    "value": "0.91",
+                    "unit": "KG"
+                  }
+                ],
+                "dimensions": [
+                  {
+                    "length": 28,
+                    "width": 9,
+                    "height": 3,
+                    "units": "IN"
+                  },
+                  {
+                    "length": 71,
+                    "width": 22,
+                    "height": 7,
+                    "units": "CM"
+                  }
+                ]
+              },
+              "packageContent": []
+            },
+            "shipmentDetails": {
+              "possessionStatus": false,
+              "weight": [
+                {
+                  "value": "2.0",
+                  "unit": "LB"
+                },
+                {
+                  "value": "0.91",
+                  "unit": "KG"
+                }
+              ]
+            },
+            "scanEvents": [
+              {
+                "date": "2022-09-06T17:28:54-05:00",
+                "eventType": "OC",
+                "eventDescription": "Shipment information sent to FedEx",
+                "exceptionCode": "",
+                "exceptionDescription": "",
+                "scanLocation": {
+                  "streetLines": [ "" ],
+                  "residential": false
+                },
+                "locationType": "CUSTOMER",
+                "derivedStatusCode": "IN",
+                "derivedStatus": "Initiated"
+              }
+            ],
+            "availableNotifications": [ "ON_DELIVERY", "ON_EXCEPTION", "ON_TENDER" ],
+            "deliveryDetails": {
+              "deliveryAttempts": "0",
+              "deliveryOptionEligibilityDetails": [
+                {
+                  "option": "INDIRECT_SIGNATURE_RELEASE",
+                  "eligibility": "INELIGIBLE"
+                },
+                {
+                  "option": "REDIRECT_TO_HOLD_AT_LOCATION",
+                  "eligibility": "INELIGIBLE"
+                },
+                {
+                  "option": "REROUTE",
+                  "eligibility": "INELIGIBLE"
+                },
+                {
+                  "option": "RESCHEDULE",
+                  "eligibility": "INELIGIBLE"
+                },
+                {
+                  "option": "RETURN_TO_SHIPPER",
+                  "eligibility": "INELIGIBLE"
+                },
+                {
+                  "option": "DISPUTE_DELIVERY",
+                  "eligibility": "POSSIBLY_ELIGIBLE"
+                },
+                {
+                  "option": "SUPPLEMENT_ADDRESS",
+                  "eligibility": "INELIGIBLE"
+                }
+              ],
+              "destinationServiceArea": "OC"
+            },
+            "originLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "HERNDON",
+                  "stateOrProvinceCode": "VA",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationId": "BCBA"
+            },
+            "destinationLocation": {
+              "locationContactAndAddress": {
+                "address": {
+                  "city": "DIAMOND BAR",
+                  "stateOrProvinceCode": "CA",
+                  "countryCode": "US",
+                  "residential": false,
+                  "countryName": "United States"
+                }
+              },
+              "locationType": ""
+            },
+            "lastUpdatedDestinationAddress": {
+              "city": "WALNUT",
+              "stateOrProvinceCode": "CA",
+              "countryCode": "US",
+              "residential": false,
+              "countryName": "United States"
+            },
+            "serviceCommitMessage": {
+              "message": "The delivery date may be updated when FedEx receives the package.",
+              "type": "SHIPMENT_LABEL_CREATED"
+            },
+            "serviceDetail": {
+              "type": "FEDEX_2_DAY",
+              "description": "FedEx 2Day",
+              "shortDescription": "P-2"
+            },
+            "standardTransitTimeWindow": { "window": {} },
+            "estimatedDeliveryTimeWindow": { "window": {} },
+            "goodsClassificationCode": "",
+            "returnDetail": {}
+          }
+        ]
+      }
+    ]
+  }
+}

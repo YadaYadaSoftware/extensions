@@ -1937,8 +1937,7 @@
 			},
 			"LocationDetail_1": {
 				"required": [
-					"locationContactAndAddress",
-					"locationType"
+					"locationContactAndAddress"
 				],
 				"type": "object",
 				"properties": {

@@ -77,6 +77,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tracking", "FedEx\Tracking\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization", "FedEx\Authorization\Authorization.csproj", "{205F38F5-3531-4361-AD7C-0F427329B989}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracking.Test", "FedEx\Tracking.Test\Tracking.Test.csproj", "{C8FA20CF-18A9-48E9-A3C4-104022939F0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{95CCF27E-8C05-4A2B-B45B-6EEFA3A6B685}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +182,10 @@ Global
 		{205F38F5-3531-4361-AD7C-0F427329B989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{205F38F5-3531-4361-AD7C-0F427329B989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{205F38F5-3531-4361-AD7C-0F427329B989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FA20CF-18A9-48E9-A3C4-104022939F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FA20CF-18A9-48E9-A3C4-104022939F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FA20CF-18A9-48E9-A3C4-104022939F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FA20CF-18A9-48E9-A3C4-104022939F0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +223,7 @@ Global
 		{CDD98829-AE67-40C5-A408-B03364141493} = {2FAC8B16-2022-4652-80D9-3D73BEE912B8}
 		{005AB0B4-0B76-424E-B69D-69A2C88C893E} = {EF95902D-E9E1-438E-A2AB-5AE91D0B8FB2}
 		{205F38F5-3531-4361-AD7C-0F427329B989} = {EF95902D-E9E1-438E-A2AB-5AE91D0B8FB2}
+		{C8FA20CF-18A9-48E9-A3C4-104022939F0B} = {EF95902D-E9E1-438E-A2AB-5AE91D0B8FB2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C9B63DA-A059-4EB7-A57C-8964D8A1011A}
