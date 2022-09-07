@@ -25,6 +25,7 @@ public class TrackingHelper
             _logger.LogTrace("{0}={1},{2}={3}", nameof(_token.GetValueAsync), await _token.GetValueAsync(), nameof(trackingNumber), trackingNumber);
 
             var client = new FedEx.Tracking.Client(httpClient);
+            client.JsonSerializerSettings.Converters.Add(new LocationDetail1Converter());
 
             var fullSchemaTrackingNumbers = new Full_Schema_Tracking_Numbers();
             fullSchemaTrackingNumbers.TrackingInfo.Add(new MasterTrackingInfo() { TrackingNumberInfo = new TrackingNumberInfo { TrackingNumber = trackingNumber } });
