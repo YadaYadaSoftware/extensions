@@ -6,4 +6,5 @@ public interface ITenantQueueMessageService<TQueueReaderClass, TTargetClass, in 
     where TQueueReaderClass : class where TTargetClass : class where TMessageType : TenantBasedMessage
 {
     Task<SendMessageResponse> SendMessageAsync(TMessageType message);
+    Task<SendMessageResponse> SendMessageAsync(Guid tenantId, TMessageType message);
 }
