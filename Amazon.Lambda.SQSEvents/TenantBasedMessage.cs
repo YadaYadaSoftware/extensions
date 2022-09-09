@@ -107,6 +107,16 @@ public class TenantBasedMessage : SendMessageRequest
 
         return returnValue;
     }
+    protected bool GetBool([CallerMemberName] string caller = null)
+    {
+        bool returnValue = default;
+        if (this.MessageAttributes.ContainsKey(caller))
+        {
+            returnValue = bool.Parse(MessageAttributes[caller].StringValue);
+        }
+
+        return returnValue;
+    }
     protected void SetInt(int value, [CallerMemberName] string caller = null)
     {
         if (this.MessageAttributes.ContainsKey(caller))
@@ -133,6 +143,16 @@ public class TenantBasedMessage : SendMessageRequest
         if (this.MessageAttributes.ContainsKey(caller))
         {
             if (!this.MessageAttributes[caller].StringValue.Equals(value)) throw new InvalidOperationException($"Cannot update {caller}");
+            return;
+        }
+
+        this.MessageAttributes.Add(caller, new MessageAttributeValue { StringValue = value.ToString(), DataType = "String" });
+    }
+    protected void SetBool(bool value, [CallerMemberName] string caller = null)
+    {
+        if (this.MessageAttributes.ContainsKey(caller))
+        {
+            if (!this.MessageAttributes[caller].StringValue.Equals(value.ToString())) throw new InvalidOperationException($"Cannot update {caller}");
             return;
         }
 
