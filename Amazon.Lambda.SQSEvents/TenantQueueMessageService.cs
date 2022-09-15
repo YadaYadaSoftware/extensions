@@ -18,7 +18,7 @@ public sealed class TenantQueueMessageService<TQueueReaderClass, TTargetClass, T
 
     public TenantQueueMessageService(IQueueUriProvider<TQueueReaderClass> queueUriProvider, IAmazonSQS sqsClient, ILoggerProvider loggerProvider, IEnumerable<Claim> claims)
     {
-        this._logger = loggerProvider.CreateLogger(this.GetType().FullName!);
+        this._logger = loggerProvider.CreateLogger(this.GetType().Name!);
         this._queueUriProvider = queueUriProvider;
         this._sqsClient = sqsClient;
         _claims = claims;
