@@ -31,4 +31,8 @@ public static class S3GetObjectResponseExtensions
         result = getObjectResponse.Metadata[key];
         return !string.IsNullOrEmpty(result);
     }
+    public static bool TryGetTenantId(this GetObjectResponse getObjectResponse, out Guid tenantId)
+    {
+        return TryGetMetadata(getObjectResponse, TransferUtilityExtensions.MetadataKeys.TenantId, out tenantId);
+    }
 }
