@@ -171,6 +171,7 @@ public static class AmazonS3ClientExtensions
         try
         {
             var response = await amazonS3.GetObjectMetadataAsync(new GetObjectMetadataRequest{BucketName = bucketName, Key = key});
+            
             return true;
         }
 
