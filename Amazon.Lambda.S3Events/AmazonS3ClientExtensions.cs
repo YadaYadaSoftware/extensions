@@ -166,7 +166,7 @@ public static class AmazonS3ClientExtensions
         }
     }
 
-    public static async Task<bool> ObjectExists(this IAmazonS3 amazonS3, string bucketName, string key, ILogger? logger = null)
+    public static async Task<bool> ObjectExistsAsync(this IAmazonS3 amazonS3, string bucketName, string key, ILogger? logger = null)
     {
         try
         {
