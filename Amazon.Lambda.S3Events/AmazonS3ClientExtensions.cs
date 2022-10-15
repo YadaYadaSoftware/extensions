@@ -165,4 +165,24 @@ public static class AmazonS3ClientExtensions
             loggerAggregateScope?.Dispose();
         }
     }
+
+    public static async Task<bool> ObjectExists(this IAmazonS3 amazonS3, string bucketName, string key, ILogger? logger = null)
+    {
+        try
+        {
+            var response = await amazonS3.GetObjectMetadataAsync(new GetObjectMetadataRequest{BucketName = bucketName, Key = key});
+            return true;
+        }
+
+        catch (AmazonS3Exception ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return false;
+
+            logger?.LogError(ex,ex.Message);
+
+            //status wasn't not found, so throw the exception
+            throw;
+        }
+    }
 }
