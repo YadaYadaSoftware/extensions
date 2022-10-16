@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Amazon.Lambda.SQSEvents;
 
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-public sealed class TenantQueueMessageService<TQueueReaderClass, TTargetClass, TMessage> : ITenantQueueMessageService<TQueueReaderClass,TTargetClass, TMessage> where TTargetClass : class where TQueueReaderClass : class where TMessage : TenantBasedMessage
+public class TenantQueueMessageService<TQueueReaderClass, TTargetClass, TMessage> : ITenantQueueMessageService<TQueueReaderClass,TTargetClass, TMessage> where TTargetClass : class where TQueueReaderClass : class where TMessage : TenantBasedMessage
 {
     private readonly IQueueUriProvider<TQueueReaderClass> _queueUriProvider;
     private readonly IAmazonSQS _sqsClient;
