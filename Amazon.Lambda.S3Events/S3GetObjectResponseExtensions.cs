@@ -1,4 +1,5 @@
 ﻿using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 
 namespace Amazon.Lambda.S3Events;
 
