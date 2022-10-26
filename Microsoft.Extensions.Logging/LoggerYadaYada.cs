@@ -12,16 +12,20 @@ namespace Microsoft.Extensions.Logging
         {
             _options = options;
             CategoryName = categoryName;
-            ScopeProvider = new LoggerExternalScopeProvider();
         }
 
-        internal IExternalScopeProvider ScopeProvider { get;}
+        internal IExternalScopeProvider ScopeProvider { get;} = new LoggerExternalScopeProvider();
         public IDisposable BeginScope<TState>(TState state) => ScopeProvider?.Push(state) ?? new NoOpDisposable();
 
         public bool IsEnabled(LogLevel logLevel)
         {
             var isEnabled = (_options.Filter == null || _options.Filter(this.CategoryName, logLevel) || (Environment.GetEnvironmentVariable("LAMBDA_TRACE_ALL")?.Equals("true", StringComparison.InvariantCultureIgnoreCase) ?? false));
             return isEnabled;
+        }
+
+        public virtual void Write(string logEntry)
+        {
+            LambdaLogger.Log(logEntry);
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
@@ -76,12 +80,12 @@ namespace Microsoft.Extensions.Logging
 
                 var finalText = string.Join(Environment.NewLine, components).Replace("\n", " ");
 
-                LambdaLogger.Log(finalText);
+                this.Write(finalText);
 
             }
             catch (Exception e)
             {
-                LambdaLogger.Log(e.ToString());
+                this.Write(e.ToString());
             }
         }
 
@@ -89,63 +93,60 @@ namespace Microsoft.Extensions.Logging
         {
             try
             {
-                if (_options.IncludeScopes && ScopeProvider != null)
+                if (!_options.IncludeScopes) return;
+
+                var keyedScopes = new Dictionary<string, string>();
+
+                AddToKeyedScopes(keyedScopes, nameof(CategoryName), this.CategoryName);
+
+
+                ScopeProvider.ForEachScope((scope, list) =>
                 {
-
-                    var keyedScopes = new Dictionary<string, string>();
-
-                    AddToKeyedScopes(keyedScopes, nameof(CategoryName), this.CategoryName);
-
-
-                    ScopeProvider.ForEachScope((scope, list) =>
+                    try
                     {
-                        try
+                        switch (scope)
                         {
-                            switch (scope)
-                            {
-                                case Dictionary<string, string> dictionaryStringString:
+                            case Dictionary<string, string> dictionaryStringString:
                                     
-                                    list.Add(System.Text.Json.JsonSerializer.Serialize(dictionaryStringString));
-                                    break;
-                                case Dictionary<string, object> dictionaryStringObject:
-                                    list.Add(System.Text.Json.JsonSerializer.Serialize(dictionaryStringObject));
-                                    break;
-                                case KeyValuePair<string, object>(var key, var value):
-                                    AddToKeyedScopes(keyedScopes, key, value);
-                                    break;
-                                case IReadOnlyList<KeyValuePair<string, object>> readOnlyList:
-                                    foreach (var (readOnlyListKey, value) in readOnlyList)
-                                    {
-                                        AddToKeyedScopes(keyedScopes, readOnlyListKey, value);
-                                    }
+                                list.Add(System.Text.Json.JsonSerializer.Serialize(dictionaryStringString));
+                                break;
+                            case Dictionary<string, object> dictionaryStringObject:
+                                list.Add(System.Text.Json.JsonSerializer.Serialize(dictionaryStringObject));
+                                break;
+                            case KeyValuePair<string, object>(var key, var value):
+                                AddToKeyedScopes(keyedScopes, key, value);
+                                break;
+                            case IReadOnlyList<KeyValuePair<string, object>> readOnlyList:
+                                foreach (var (readOnlyListKey, value) in readOnlyList)
+                                {
+                                    if (readOnlyListKey.StartsWith('{') && readOnlyListKey.EndsWith('}')) continue;
+                                    AddToKeyedScopes(keyedScopes, readOnlyListKey, value);
+                                }
 
-                                    break;
-                                case KeyValuePair<string, string>(var key, var value):
-                                    AddToKeyedScopes(keyedScopes, key, value);
-                                    break;
-                                default:
-                                    list.Add(scope.GetType().FullName);
-                                    break;
-                            }
-
+                                break;
+                            case KeyValuePair<string, string>(var key, var value):
+                                AddToKeyedScopes(keyedScopes, key, value);
+                                break;
+                            default:
+                                list.Add(scope.GetType().FullName);
+                                break;
                         }
-                        catch (NullReferenceException)
-                        {
-                            keyedScopes.Add(scope.ToString(), "null");
 
-                        }
-                        catch (Exception e)
-                        {
-                            keyedScopes.Add($"Error Adding Item {scope} {Guid.NewGuid()}", e.ToString());
-                        }
-                    }, (logMessageComponents));
-
-                    if (keyedScopes.Any())
-                    {
-                        logMessageComponents.Add(System.Text.Json.JsonSerializer.Serialize(keyedScopes));
                     }
+                    catch (NullReferenceException)
+                    {
+                        keyedScopes.Add(scope.ToString(), "null");
 
+                    }
+                    catch (Exception e)
+                    {
+                        keyedScopes.Add($"Error Adding Item {scope} {Guid.NewGuid()}", e.ToString());
+                    }
+                }, (logMessageComponents));
 
+                if (keyedScopes.Any())
+                {
+                    logMessageComponents.Add(System.Text.Json.JsonSerializer.Serialize(keyedScopes));
                 }
 
             }
