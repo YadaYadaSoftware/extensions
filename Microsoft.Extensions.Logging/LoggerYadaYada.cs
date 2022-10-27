@@ -130,7 +130,7 @@ namespace Microsoft.Extensions.Logging
                                 AddToKeyedScopes(keyedScopes, key, value);
                                 break;
                             default:
-                                list.Add(scope.GetType().FullName);
+                                AddToKeyedScopes(keyedScopes,"Scope",scope.ToString());
                                 break;
                         }
 
