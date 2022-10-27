@@ -32,6 +32,8 @@ namespace Microsoft.Extensions.Logging
         {
             try
             {
+                ScopeProvider.Push(state);
+
                 if (formatter == null)
                 {
                     throw new ArgumentNullException(nameof(formatter));
