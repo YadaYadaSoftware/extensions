@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using YadaYada.TestUtilities;
@@ -41,6 +42,15 @@ namespace Logging.Test
             using var scope2 = p.Target.BeginScope("Scope2");
             p.Target.LogTrace("x");
             written.Replace("\r", string.Empty).Should().Be(expected);
+        }
+
+        [Fact]
+        public void AddScopeGetsVariableNameTest()
+        {
+            //[CallerArgumentExpression("argument")]
+            using var p = new MockPackage<LoggerYadaYada>(CreateLoggerMock);
+            var x = "abc";
+            p.Target.AddScope(x);
         }
 
         private Mock<LoggerYadaYada> CreateLoggerMock()
