@@ -50,7 +50,7 @@ namespace Logging.Test
             //[CallerArgumentExpression("argument")]
             using var p = new MockPackage<LoggerYadaYada>(CreateLoggerMock);
             var x = "abc";
-            p.Target.AddScope(x);
+            p.Target.Add(x);
         }
 
         private Mock<LoggerYadaYada> CreateLoggerMock()
