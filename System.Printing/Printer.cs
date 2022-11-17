@@ -7,7 +7,13 @@ using Microsoft.Win32;
 
 namespace System.Printing;
 
-public class Printer : IEquatable<Printer>
+public interface IPrinter
+{
+    void SendRawData(string data);
+    void SendRawData(FileInfo file);
+}
+
+public class Printer : IEquatable<Printer>, IPrinter
 {
     // these are the defaults for a 3x5 label using the Seagull driver
     public const int DefaultPrintWidth = 800;
