@@ -9,25 +9,34 @@ namespace System.Printing;
 
 public interface IPrinter
 {
+    string Name { get; }
+    string PortName { get; }
+    string Driver { get; }
+    PrintMode PrintMode { get; }
+    string IPAddress { get; }
+    int NetworkPort { get; }
+    string CacheFolderPath { get; set; }
+    Point DPI { get; set; }
     void SendRawData(string data);
     void SendRawData(FileInfo file);
+    bool Equals(Printer other);
 }
 
 public class Printer : IEquatable<Printer>, IPrinter
 {
     // these are the defaults for a 3x5 label using the Seagull driver
-    public const int DefaultPrintWidth = 800;
-    public const int DefaultPrintHeight = 1200;
-    public const int DefaultPrintTop = 10;
-    public const int DefaultPrintLeft = 10;
+    //public const int DefaultPrintWidth = 800;
+    //public const int DefaultPrintHeight = 1200;
+    //public const int DefaultPrintTop = 10;
+    //public const int DefaultPrintLeft = 10;
 
     // used to track if we need to send mode to the printer - we only send changes once
     private PrintMode LastModeSent { get; set; } = PrintMode.Unknown;
 
-    public int PrintTop { get; set; } = DefaultPrintTop;
-    public int PrintLeft { get; set; } = DefaultPrintLeft;
-    public int PrintWidth { get; set; } = DefaultPrintWidth;
-    public int PrintHeight { get; set; } = DefaultPrintHeight;
+    //public int PrintTop { get; set; } = DefaultPrintTop;
+    //public int PrintLeft { get; set; } = DefaultPrintLeft;
+    //public int PrintWidth { get; set; } = DefaultPrintWidth;
+    //public int PrintHeight { get; set; } = DefaultPrintHeight;
 
     public string Name { get; private set; }
     public string PortName { get; private set; }
@@ -81,13 +90,6 @@ public class Printer : IEquatable<Printer>, IPrinter
 
     public Point DPI { get; set; }
 
-    public PrintJob CreateJob(string jobName = null)
-    {
-        var job = new PrintJobTallComponents(this, jobName);
-
-        return job;
-    }
-
     public void SendRawData(string data)
     {
         RawPrinterHelper.SendStringToPrinter(this.Name, data);
@@ -98,116 +100,77 @@ public class Printer : IEquatable<Printer>, IPrinter
         SendRawData(data);
     }
 
-    public Printer SetPrintMode(PrintMode mode)
-    {
-        string command = null;
+    //public class PrinterStatus
+    //{
+    //    internal PrinterStatus(bool isPaperOut, bool isPaused, int formatsInReceiveBuffer)
+    //    {
+    //        IsPaperOut = isPaperOut;
+    //        IsPaused = isPaused;
+    //        FormatsInReceiveBuffer = formatsInReceiveBuffer;
+    //    }
 
-        if (LastModeSent != mode)
-        {
-            switch (mode)
-            {
-                case PrintMode.TearOff:        // T
-                    command = string.Format(ZplConstants.PRINT_MODE_FMT, "T");
-                    break;
-                case PrintMode.PeelOff:        // P
-                    command = string.Format(ZplConstants.PRINT_MODE_FMT, "P");
-                    break;
-                case PrintMode.Rewind:         // R
-                    command = string.Format(ZplConstants.PRINT_MODE_FMT, "R");
-                    break;
-                case PrintMode.DelayedCut:     // D
-                    command = string.Format(ZplConstants.PRINT_MODE_FMT, "D");
-                    break;
-                case PrintMode.Cut:            // C
-                    command = string.Format(ZplConstants.PRINT_MODE_FMT, "C");
-                    break;
-            }
+    //    public bool IsPaperOut { get; private set; }
+    //    public bool IsPaused { get; private set; }
+    //    public int FormatsInReceiveBuffer { get; private set; }
+    //}
 
-            LastModeSent = PrintMode;
-        }
+    //public PrinterStatus GetStatusDirect()
+    //{
+    //    var cmd = GetSgdGetCommand("device.host_status");
+    //    var buffer = Encoding.GetEncoding(850).GetBytes(cmd);
+    //    var status = SendAndReceiveToPrinter(IPAddress, NetworkPort, buffer, 0, buffer.Length);
 
-        if (!string.IsNullOrEmpty(command))
-        {
-            RawPrinterHelper.SendStringToPrinter(this.Name, command);
-        }
+    //    if (!string.IsNullOrEmpty(status))
+    //    {
+    //        status = status.Trim('\"');
+    //        var lines = status.Split(new string[] { "\r\n" }, System.StringSplitOptions.RemoveEmptyEntries);
 
-        PrintMode = mode;
+    //        var tokens = lines[0].Split(',');
 
+    //        var paperOut = tokens[1] == "1";
+    //        var paused = tokens[2] == "1";
+    //        int.TryParse(tokens[4], out int formatsInReceiveBuffer);
+    //        return new PrinterStatus(paperOut, paused, formatsInReceiveBuffer);
+    //    }
+    //    Debug.WriteLine("Failed to get printer status");
+    //    return null;
+    //}
 
-        return this;
-    }
+    //private string GetSgdGetCommand(string command, string parameter = "")
+    //{
+    //    return $"! U1 getvar \"{command}\" \"{parameter}\"\r\n";
+    //}
 
-    public class PrinterStatus
-    {
-        internal PrinterStatus(bool isPaperOut, bool isPaused, int formatsInReceiveBuffer)
-        {
-            IsPaperOut = isPaperOut;
-            IsPaused = isPaused;
-            FormatsInReceiveBuffer = formatsInReceiveBuffer;
-        }
+    //private string SendAndReceiveToPrinter(string hostname, int port, byte[] buffer, int offset, int count)
+    //{
+    //    var response = new byte[4096];
 
-        public bool IsPaperOut { get; private set; }
-        public bool IsPaused { get; private set; }
-        public int FormatsInReceiveBuffer { get; private set; }
-    }
+    //    using (var tcpClient = new TcpClient(hostname, port))
+    //    using (var networkStream = tcpClient.GetStream())
+    //    {
 
-    public PrinterStatus GetStatusDirect()
-    {
-        var cmd = GetSgdGetCommand("device.host_status");
-        var buffer = Encoding.GetEncoding(850).GetBytes(cmd);
-        var status = SendAndReceiveToPrinter(IPAddress, NetworkPort, buffer, 0, buffer.Length);
+    //        networkStream.Write(buffer, offset, count);
+    //        var i = 0;
 
-        if (!string.IsNullOrEmpty(status))
-        {
-            status = status.Trim('\"');
-            var lines = status.Split(new string[] { "\r\n" }, System.StringSplitOptions.RemoveEmptyEntries);
+    //        // give the printer time to generate a response
+    //        Thread.Sleep(250);
 
-            var tokens = lines[0].Split(',');
+    //        while (networkStream.DataAvailable)
+    //        {
+    //            var b = networkStream.ReadByte();
+    //            if (b == -1) break;
+    //            response[i++] = (byte)b;
+    //        }
 
-            var paperOut = tokens[1] == "1";
-            var paused = tokens[2] == "1";
-            int.TryParse(tokens[4], out int formatsInReceiveBuffer);
-            return new PrinterStatus(paperOut, paused, formatsInReceiveBuffer);
-        }
-        Debug.WriteLine("Failed to get printer status");
-        return null;
-    }
+    //        return Encoding.GetEncoding(850).GetString(response, 0, i);
+    //    }
+    //}
 
-    private string GetSgdGetCommand(string command, string parameter = "")
-    {
-        return $"! U1 getvar \"{command}\" \"{parameter}\"\r\n";
-    }
-
-    private string SendAndReceiveToPrinter(string hostname, int port, byte[] buffer, int offset, int count)
-    {
-        var response = new byte[4096];
-
-        using (var tcpClient = new TcpClient(hostname, port))
-        using (var networkStream = tcpClient.GetStream())
-        {
-
-            networkStream.Write(buffer, offset, count);
-            var i = 0;
-
-            // give the printer time to generate a response
-            Thread.Sleep(250);
-
-            while (networkStream.DataAvailable)
-            {
-                var b = networkStream.ReadByte();
-                if (b == -1) break;
-                response[i++] = (byte)b;
-            }
-
-            return Encoding.GetEncoding(850).GetString(response, 0, i);
-        }
-    }
-
-    internal NativePrintJob[] GetNativePrintJobs()
-    {
-        var jobs = PrintManager.GetCurrentPrintJobsForPrinter(this.Driver);
-        return jobs;
-    }
+    //internal NativePrintJob[] GetNativePrintJobs()
+    //{
+    //    var jobs = PrintManager.GetCurrentPrintJobsForPrinter(this.Driver);
+    //    return jobs;
+    //}
 
     public bool Equals(Printer other)
     {
