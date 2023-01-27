@@ -8,7 +8,7 @@ namespace System.Collections.Generic;
 /// 
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class CircularBuffer<T> : IEnumerable<T>
+public class CircularBuffer<T> : IEnumerable<T>, ICollection<T>
 {
     public event EventHandler ItemAdded = delegate { };
 
@@ -92,6 +92,11 @@ public class CircularBuffer<T> : IEnumerable<T>
         }
     }
 
+    public bool Remove(T item)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Gets the current count of elements in the buffer
     /// </summary>
@@ -120,6 +125,8 @@ public class CircularBuffer<T> : IEnumerable<T>
             }
         }
     }
+
+    public bool IsReadOnly { get; }
 
     /// <summary>
     /// The HighWater event will fire when the buffer contains this many (or more) elements.
@@ -160,37 +167,21 @@ public class CircularBuffer<T> : IEnumerable<T>
         }
     }
 
-    public void Append(IEnumerable<T> items)
+    public void AddRange(IEnumerable<T> items)
     {
         foreach (var i in items)
         {
-            Append(i);
+            Add(i);
         }
     }
 
-    public void Append(T[] items, int offset, int count)
+    public void Add(T[] items, int offset, int count)
     {
         for (int i = offset; i < offset + count; i++)
         {
-            Append(items[i]);
+            Add(items[i]);
         }
     }
-
-    // TODO: not sure why i can't do this. but LINQ adds Append<T> methods.
-    //public void Append<T>(T element)
-    //{
-    //    this.Enqueue(element);
-    //}
-
-    //public void Append(T element)
-    //{
-    //    this.Enqueue(element);
-    //}
-
-    //public void Append(IEnumerable<T> items)
-    //{
-    //    this.Enqueue(items);
-    //}
 
     /// <summary>
     /// Adds an element to the head of the buffer
@@ -199,7 +190,7 @@ public class CircularBuffer<T> : IEnumerable<T>
     /// <remarks>
     /// If the buffer is full and Enqueue is called, the new item will be successfully added to the buffer and the tail (oldest) item will be automatically removed
     /// </remarks>
-    public void Append(T item)
+    public void Add(T item)
     {
         lock (_syncRoot)
         {
@@ -399,6 +390,11 @@ public class CircularBuffer<T> : IEnumerable<T>
 
             return false;
         }
+    }
+
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        throw new NotImplementedException();
     }
 
     //public bool Contains(T[] pattern)
