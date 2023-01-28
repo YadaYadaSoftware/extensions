@@ -395,7 +395,7 @@ public class CircularBuffer<T> : IEnumerable<T>, ICollection<T>
     public void CopyTo(T[] array, int arrayIndex)
     {
 
-        _list.CopyTo(array, arrayIndex);
+        _list.Where(i=>i is not null).ToArray().CopyTo(array, arrayIndex);
     }
 
     //public bool Contains(T[] pattern)
@@ -544,4 +544,9 @@ public class BufferException : Exception
         : base(message)
     {
     }
+}
+
+public class CircularBufferTest
+{
+
 }
