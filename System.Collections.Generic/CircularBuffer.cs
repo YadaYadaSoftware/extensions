@@ -394,7 +394,8 @@ public class CircularBuffer<T> : IEnumerable<T>, ICollection<T>
 
     public void CopyTo(T[] array, int arrayIndex)
     {
-        throw new NotImplementedException();
+
+        _list.CopyTo(array, arrayIndex);
     }
 
     //public bool Contains(T[] pattern)
