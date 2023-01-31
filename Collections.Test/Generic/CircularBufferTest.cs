@@ -19,8 +19,22 @@ public class CircularBufferTest
         }
         var a = p.ToArray();
         a.Should().HaveCount(7);
+    }
 
+    [Fact]
+    public void OverrunTest()
+    {
+        var p = new CircularBuffer<int>(100);
+        for (int i = 0; i < 100; i++)
+        {
+            p.Add(i);
+        }
+        p.First().Should().Be(0);
+        p.Last().Should().Be(99);
 
+        p.Add(101);
 
+        p.First().Should().Be(1);
+        p.Last().Should().Be(100);
     }
 }
