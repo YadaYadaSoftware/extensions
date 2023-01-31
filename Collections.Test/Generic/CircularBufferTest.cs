@@ -32,7 +32,7 @@ public class CircularBufferTest
         p.First().Should().Be(0);
         p.Last().Should().Be(99);
 
-        p.Add(101);
+        p.Add(100);
 
         p.First().Should().Be(1);
         p.Last().Should().Be(100);
