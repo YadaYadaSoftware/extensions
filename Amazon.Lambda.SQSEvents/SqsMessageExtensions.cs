@@ -29,15 +29,12 @@ public static class SqsMessageExtensions
         type = Type.GetType(value.StringValue);
         return type != default;
     }
-    public static bool TryGetEventId(this SQSEvent.SQSMessage message, out string? eventId)
+    public static bool TryGetEventId(this SQSEvent.SQSMessage message, out Guid eventId)
     {
-        if (message.MessageAttributes.SingleOrDefault(_ => _.Key == nameof(TenantBasedMessage.EventId)) is not {Value: { } value})
-        {
-            eventId = default;
-            return false;
-        }
-        eventId = value.StringValue;
-        return true;
+        eventId = default;
+
+        return (message.MessageAttributes.SingleOrDefault(_ => _.Key == nameof(TenantBasedMessage.EventId)) is
+            {Value: { } value} && Guid.TryParse(value.StringValue, out eventId));
     }
 
     public static bool TryGetFileProcessingId(this SQSEvent.SQSMessage message, out Guid fileProcessingId)
