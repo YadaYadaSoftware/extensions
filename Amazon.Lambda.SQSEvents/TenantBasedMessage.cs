@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using Amazon.SQS.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Amazon.Lambda.SQSEvents;
 
@@ -14,15 +15,21 @@ public class TenantBasedMessage : SendMessageRequest
     public const string DataTypeType = "String.type";
     public const string FileProcessingId = "FileProcessingId";
 
-    public TenantBasedMessage(Guid eventId, [NotNull] string body)
+    public TenantBasedMessage(Guid requestId, [NotNull] string body) : this(requestId.ToString(), body)
     {
-        if (eventId == default) throw new ArgumentNullException(nameof(eventId));
-        this.MessageGroupId = eventId.ToString();
-        this.MessageBody = body ?? throw new ArgumentNullException(nameof(body));
-        this.EventId = eventId;
+
     }
 
-    protected TenantBasedMessage(Guid eventId, object body) : this(eventId, System.Text.Json.JsonSerializer.Serialize(body))
+
+    public TenantBasedMessage(string requestId, [NotNull] string body)
+    {
+        if (requestId == default) throw new ArgumentNullException(nameof(requestId));
+        this.MessageGroupId = requestId;
+        this.MessageBody = body ?? throw new ArgumentNullException(nameof(body));
+        this.EventId = requestId;
+    }
+
+    public TenantBasedMessage(Guid eventId, object body) : this(eventId.ToString(), System.Text.Json.JsonSerializer.Serialize(body))
     {
     }
 
@@ -41,10 +48,10 @@ public class TenantBasedMessage : SendMessageRequest
     }
 
     [JsonIgnore]
-    public Guid EventId
+    public string EventId
     {
-        get => this.GetGuid();
-        private init => this.SetGuid(value);
+        get => this.GetString();
+        private init => this.SetString(value);
     }
 
     [JsonIgnore]
