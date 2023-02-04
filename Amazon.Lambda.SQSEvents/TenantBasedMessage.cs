@@ -14,7 +14,7 @@ public class TenantBasedMessage : SendMessageRequest
     public const string DataTypeType = "String.type";
     public const string FileProcessingId = "FileProcessingId";
 
-    public TenantBasedMessage(Guid eventId, [NotNull] string body)
+    public TenantBasedMessage(string eventId, [NotNull] string body)
     {
         if (eventId == default) throw new ArgumentNullException(nameof(eventId));
         this.MessageGroupId = eventId.ToString();
@@ -22,7 +22,7 @@ public class TenantBasedMessage : SendMessageRequest
         this.EventId = eventId;
     }
 
-    protected TenantBasedMessage(Guid eventId, object body) : this(eventId, System.Text.Json.JsonSerializer.Serialize(body))
+    protected TenantBasedMessage(string eventId, object body) : this((string) eventId, System.Text.Json.JsonSerializer.Serialize(body))
     {
     }
 
@@ -41,10 +41,10 @@ public class TenantBasedMessage : SendMessageRequest
     }
 
     [JsonIgnore]
-    public Guid EventId
+    public string EventId
     {
-        get => this.GetGuid();
-        private init => this.SetGuid(value);
+        get => this.GetString();
+        private init => this.SetString(value);
     }
 
     [JsonIgnore]
