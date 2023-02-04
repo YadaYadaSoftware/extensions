@@ -2,7 +2,7 @@
 
 public class TenantBasedMessage<TTarget> : TenantBasedMessage
 {
-    public TenantBasedMessage(string eventId, Uri queueUri, string body) : base((string) eventId, body)
+    public TenantBasedMessage(Guid eventId, Uri queueUri, string body) : base(eventId, body)
     {
         this.MessageType = typeof(TTarget);
     }
