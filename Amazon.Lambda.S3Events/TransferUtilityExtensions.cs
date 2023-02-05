@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
 namespace Amazon.S3.Transfer;
@@ -40,7 +42,7 @@ public static class TransferUtilityExtensions
         return transfer.DownloadAsync(fileInfo.FullName, bucket, key);
     }
 
-    public static async Task<S3Object> UploadAsync(this ITransferUtility transferUtility, FileInfo file, string bucketName, string key, Guid tenantId)
+    public static async Task<S3Object> UploadAsync(this ITransferUtility transferUtility, FileInfo file, string bucketName, string key, Guid tenantId, ILogger? logger = null)
     {
         if (transferUtility == null) throw new ArgumentNullException(nameof(transferUtility));
         if (file == null) throw new ArgumentNullException(nameof(file));
@@ -48,14 +50,17 @@ public static class TransferUtilityExtensions
         if (key == null) throw new ArgumentNullException(nameof(key));
         if (tenantId == Guid.Empty) throw new ArgumentNullException(nameof(tenantId));
 
-        if (!key.TrimStart('/').StartsWith(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase))
+        string finalKey = key;
+
+        if (!finalKey.TrimStart('/').StartsWith(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase))
         {
-            key = $"/{tenantId}/{key}".Replace("//","/");
+            finalKey = $"/{tenantId}/{finalKey}/".Replace("//","/");
+            logger?.LogTrace($"Updated {nameof(key)} from '{key}' to '{finalKey}'");
         }
 
         var transferUtilityUploadRequest = new TransferUtilityUploadRequest
         {
-            Key = key,
+            Key = finalKey,
             BucketName = bucketName,
             FilePath = file.FullName
         };
@@ -64,7 +69,7 @@ public static class TransferUtilityExtensions
 
         await transferUtility.UploadAsync(transferUtilityUploadRequest);
 
-        return new S3Object {BucketName = bucketName, Key = key};
+        return new S3Object {BucketName = bucketName, Key = finalKey };
 
     }
 }
