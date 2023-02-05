@@ -50,7 +50,7 @@ public static class TransferUtilityExtensions
 
         if (!key.TrimStart('/').StartsWith(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase))
         {
-            key = $"/{tenantId}/".Replace("//","/");
+            key = $"/{tenantId}/{key}".Replace("//","/");
         }
 
         var transferUtilityUploadRequest = new TransferUtilityUploadRequest
