@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - id: bump-blazor-version
+      uses: YadaYadaSoftware/assembly-version@main
+      with:
+        bump: 'package-patch'
+        source: $GITHUB_WORKSPACE/Amazon.Lambda.S3Events/S3Events.csproj
     - name: Set Version
       run: echo "V=2023.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
