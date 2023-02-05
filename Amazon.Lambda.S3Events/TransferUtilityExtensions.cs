@@ -40,13 +40,18 @@ public static class TransferUtilityExtensions
         return transfer.DownloadAsync(fileInfo.FullName, bucket, key);
     }
 
-    public static Task UploadAsync(this ITransferUtility transferUtility, FileInfo file, string bucketName, string key, Guid tenantId)
+    public static async Task<S3Object> UploadAsync(this ITransferUtility transferUtility, FileInfo file, string bucketName, string key, Guid tenantId)
     {
         if (transferUtility == null) throw new ArgumentNullException(nameof(transferUtility));
         if (file == null) throw new ArgumentNullException(nameof(file));
         if (bucketName == null) throw new ArgumentNullException(nameof(bucketName));
         if (key == null) throw new ArgumentNullException(nameof(key));
         if (tenantId == Guid.Empty) throw new ArgumentNullException(nameof(tenantId));
+
+        if (!key.TrimStart('/').StartsWith(tenantId.ToString(), StringComparison.InvariantCultureIgnoreCase))
+        {
+            key = $"/{tenantId}/".Replace("//","/");
+        }
 
         var transferUtilityUploadRequest = new TransferUtilityUploadRequest
         {
@@ -57,7 +62,9 @@ public static class TransferUtilityExtensions
 
         transferUtilityUploadRequest.Metadata.Add(MetadataKeys.TenantId,tenantId.ToString());
 
-        return transferUtility.UploadAsync(transferUtilityUploadRequest);
+        await transferUtility.UploadAsync(transferUtilityUploadRequest);
+
+        return new S3Object {BucketName = bucketName, Key = key};
 
     }
 }
