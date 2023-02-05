@@ -11,20 +11,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set Version
-      run: echo "V=2023.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
+      run: echo "VERSION=2023.$(date +%j).${{ github.run_number }}" >> $GITHUB_ENV
     - name: Echo Version
-      run: echo "V=$V"
+      run: echo "VERSION=$VERSION"
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
     - name: Setup GitHub Nuget
       run: dotnet nuget add source --username hounddog22030 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name yadayadasoftware "https://nuget.pkg.github.com/yadayadasoftware/index.json"
-    - id: bump-blazor-version
-      uses: YadaYadaSoftware/assembly-version@main
-      with:
-        bump: 'package-patch'
-        source: $GITHUB_WORKSPACE/Amazon.Lambda.S3Events/S3Events.csproj
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
@@ -32,6 +27,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish NuGet
-      run: dotnet pack --no-build -p:PackageVersion=$V --include-source
+      run: dotnet pack --no-build --include-source
     - name: Publish Package To GitHub
       run: dotnet nuget push **/*.symbols.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "yadayadasoftware"
