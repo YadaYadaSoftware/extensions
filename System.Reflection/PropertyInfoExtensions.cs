@@ -23,12 +23,9 @@ public static class PropertyInfoExtensions
     {
         if (propertyInfo.GetCustomAttribute<EditableAttribute>() is { } editableAttribute) return editableAttribute.AllowEdit;
 
-        if (propertyInfo.DeclaringType?.GetCustomAttribute<MetadataTypeAttribute>() is { } metadataTypeAttribute)
-        {
-            if (metadataTypeAttribute.MetadataClassType.GetProperty(propertyInfo.Name)?.GetCustomAttribute<EditableAttribute>()?.AllowEdit ?? false) return true;
-        }
+        if (propertyInfo.DeclaringType?.GetCustomAttribute<MetadataTypeAttribute>() is not { } metadataTypeAttribute) return false;
 
-        return false;
+        return metadataTypeAttribute.MetadataClassType.GetProperty(propertyInfo.Name)?.GetCustomAttribute<EditableAttribute>()?.AllowEdit ?? false;
     }
     public static ForeignKeyAttribute GetForeignKeyAttribute(this PropertyInfo propertyInfo)
     {
