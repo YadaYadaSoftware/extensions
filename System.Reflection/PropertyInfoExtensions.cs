@@ -21,7 +21,14 @@ public static class PropertyInfoExtensions
     }
     public static bool IsEditable(this PropertyInfo propertyInfo)
     {
-        return propertyInfo.GetCustomAttribute<EditableAttribute>()?.AllowEdit ?? false;
+        if (propertyInfo.GetCustomAttribute<EditableAttribute>() is { } editableAttribute) return editableAttribute.AllowEdit;
+
+        if (propertyInfo.DeclaringType?.GetCustomAttribute<MetadataTypeAttribute>() is { } metadataTypeAttribute)
+        {
+            if (metadataTypeAttribute.MetadataClassType.GetProperty(propertyInfo.Name)?.GetCustomAttribute<EditableAttribute>()?.AllowEdit ?? false) return true;
+        }
+
+        return false;
     }
     public static ForeignKeyAttribute GetForeignKeyAttribute(this PropertyInfo propertyInfo)
     {
